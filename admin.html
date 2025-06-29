@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="admin-page">
     <div class="admin-grid">
@@ -70,19 +71,36 @@
             const refreshButton = document.getElementById('refresh-button');
             const csvButton = document.getElementById('csv-button');
 
+            const supabaseUrl = 'https://nabbbowykckcfsixxgws.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
             async function fetchData() {
                 try {
                     // Fetch stats
-                    const statsResponse = await fetch('/admin/stats');
-                    if (!statsResponse.ok) throw new Error('Failed to fetch stats');
-                    const stats = await statsResponse.json();
-                    visitorsCountEl.textContent = stats.visitors;
-                    subscribersCountEl.textContent = stats.subscribers;
+                    const { data: stats, error: statsError } = await supabase
+                        .from('site_stats')
+                        .select('value')
+                        .eq('key', 'visitors')
+                        .single();
+
+                    if (statsError) throw statsError;
+                    visitorsCountEl.textContent = stats.value;
+
+                    const { count, error: subscribersError } = await supabase
+                        .from('subscribers')
+                        .select('*', { count: 'exact' });
+
+                    if (subscribersError) throw subscribersError;
+                    subscribersCountEl.textContent = count;
 
                     // Fetch subscribers
-                    const subscribersResponse = await fetch('/admin/subscribers');
-                    if (!subscribersResponse.ok) throw new Error('Failed to fetch subscribers');
-                    const subscribers = await subscribersResponse.json();
+                    const { data: subscribers, error: subscribersListError } = await supabase
+                        .from('subscribers')
+                        .select('email, subscribed_at')
+                        .order('subscribed_at', { ascending: false });
+
+                    if (subscribersListError) throw subscribersListError;
                     
                     subscribersList.innerHTML = ''; // Clear existing list
                     
@@ -93,9 +111,8 @@
                         
                         emailCell.textContent = subscriber.email;
                         
-                        const utcDate = new Date(subscriber.subscribed_at + 'Z');
-                        const estDate = new Date(utcDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-                        dateCell.textContent = estDate.toLocaleString();
+                        const utcDate = new Date(subscriber.subscribed_at);
+                        dateCell.textContent = utcDate.toLocaleString();
                         
                         row.appendChild(emailCell);
                         row.appendChild(dateCell);
@@ -112,16 +129,19 @@
 
             csvButton.addEventListener('click', async () => {
                 try {
-                    const subscribersResponse = await fetch('/admin/subscribers');
-                    if (!subscribersResponse.ok) throw new Error('Failed to fetch subscribers');
-                    const subscribers = await subscribersResponse.json();
+                    const { data: subscribers, error } = await supabase
+                        .from('subscribers')
+                        .select('email, subscribed_at')
+                        .order('subscribed_at', { ascending: false });
+
+                    if (error) throw error;
 
                     let csvContent = "data:text/csv;charset=utf-8,";
                     csvContent += "Email,Time\n";
 
                     subscribers.forEach(s => {
-                        const estDate = new Date(new Date(s.subscribed_at + 'Z').toLocaleString('en-US', { timeZone: 'America/New_York' }));
-                        const row = `${s.email},"${estDate.toLocaleString()}"`;
+                        const utcDate = new Date(s.subscribed_at);
+                        const row = `${s.email},"${utcDate.toLocaleString()}"`;
                         csvContent += row + "\n";
                     });
 
