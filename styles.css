@@ -1,30 +1,32 @@
 :root {
-    --color-background: #f2c527;
-    --color-foreground: #1a1a1a;
-    --color-accent: #e53935;
-    --twitter-color: #1DA1F2;
-    --tiktok-color: #000000;
-    --instagram-color: #E4405F;
-    --telegram-color: #26A5E4;
-    --discord-color: #7289DA;
+    /* Define the color palette for easy management and consistency. */
+    --color-background: #FDB813; /* Vintage Yellow */
+    --color-foreground: #111111; /* Even Darker Grey */
+    --color-accent: #FF6347; /* Tomato */
+
+    /* Establish a root font size for responsive typography. Increased to scale layout up by 25%. */
+    font-size: 18px;
 }
 
 body {
+    /* Use a scalable rem unit for the halftone background size. */
     background-color: var(--color-background);
-    background-image:
-        radial-gradient(circle at 25% 25%, var(--color-foreground) 2%, transparent 0),
-        radial-gradient(circle at 75% 25%, var(--color-foreground) 2%, transparent 0),
-        radial-gradient(circle at 25% 75%, var(--color-foreground) 2%, transparent 0),
-        radial-gradient(circle at 75% 75%, var(--color-foreground) 2%, transparent 0);
-    background-size: 10px 10px;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+    background-size: 5px 5px;
     color: var(--color-foreground);
-    font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: 'Press Start 2P', cursive;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
     text-align: center;
+    overflow: hidden;
+    zoom: 0.9;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #wrapper {
@@ -36,7 +38,7 @@ body {
 
 #main {
     width: 100%;
-    max-width: 45rem;
+    max-width: 50rem;
 }
 
 .inner {
@@ -44,26 +46,21 @@ body {
 }
 
 .image .frame {
-    display: inline-block;
-    width: 11.375rem;
-    border-radius: 100%;
+    position: relative;
     overflow: hidden;
-    margin-bottom: 1rem;
+    display: inline-block;
+    width: auto;
+    max-width: 17rem; /* Adjust as needed */
+    margin-bottom: 2rem;
 }
+
 
 .image .frame img {
     width: 100%;
     display: block;
+    border-radius: 0; /* Ensure no radius is applied */
 }
 
-hr {
-    border: 0;
-    height: 5px;
-    width: 20rem;
-    background-color: var(--color-foreground);
-    border-radius: 11px;
-    margin: 1.5rem auto;
-}
 
 .buttons {
     list-style: none;
@@ -71,56 +68,38 @@ hr {
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    /* Use clamp() for a fluid gap between a min and max value. */
+    gap: 1rem;
     align-items: center;
 }
 
 .buttons li a {
     display: inline-block;
-    width: 19rem;
-    height: 2.75rem;
-    line-height: 2.75rem;
-    padding: 0 0.5rem;
+    width: 22rem;
+    height: 3.5rem; /* Slightly taller buttons */
+    line-height: 3.5rem; /* Vertically center text */
+    padding: 0 1rem; /* More horizontal padding */
+    font-size: 1.1rem;
     background-color: var(--color-foreground);
-    color: var(--color-background);
+    color: #FFFFFF;
     text-decoration: none;
     text-transform: uppercase;
-    font-weight: 700;
-    border-radius: 0.875rem;
-    transition: transform 0.25s ease, background-color 0.25s ease;
+    font-weight: 400;
+    border-radius: 1rem; /* More rounded corners */
+    transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Add a subtle shadow */
 }
 
 .buttons li a:hover {
-    transform: scale(1.06);
+    transform: scale(1.05) translateY(-2px); /* Lift effect */
     background-color: var(--color-accent);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15); /* Enhance shadow on hover */
 }
 
-.icons {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    font-size: 1.75em;
-}
 
-.icons li a {
-    color: var(--color-foreground);
-    transition: color 0.25s ease, transform 0.25s ease;
-}
 
-.icons li a:hover {
-    transform: scale(1.1475);
-}
 
-.icons .n01:hover { color: var(--twitter-color); }
-.icons .n02:hover { color: var(--tiktok-color); }
-.icons .n03:hover { color: var(--instagram-color); }
-.icons .n04:hover { color: var(--telegram-color); }
-.icons .n05:hover { color: var(--discord-color); }
-
-/* Modal styles */
+/* Modal styles remain largely unchanged but benefit from global rem scaling. */
 .modal {
     display: none;
     position: fixed;
@@ -134,21 +113,22 @@ hr {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #fff; /* Brighter white */
     margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
+    padding: 2rem; /* More padding */
+    border: none; /* Remove border */
     width: 80%;
-    max-width: 500px;
-    border-radius: 1rem;
+    max-width: 31.25rem; /* Converted to rem. */
+    border-radius: 1.5rem; /* More rounded corners */
     text-align: center;
-    color: #000;
+    color: var(--color-foreground);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2); /* Softer, more prominent shadow */
 }
 
 .close-button {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 1.75rem; /* Converted to rem. */
     font-weight: bold;
 }
 
@@ -161,38 +141,41 @@ hr {
 
 #newsletter-form input[type="email"] {
     width: 80%;
-    padding: 12px;
-    margin: 8px 0;
+    padding: 0.75rem; /* Converted to rem. */
+    margin: 0.5rem 0;
     display: inline-block;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 0.25rem; /* Converted to rem. */
     box-sizing: border-box;
 }
 
 #newsletter-form button {
     width: 80%;
-    background-color: var(--color-foreground);
-    color: var(--color-background);
-    padding: 14px 20px;
-    margin: 8px 0;
+    background-color: var(--color-accent); /* Use accent color */
+    color: #fff; /* White text */
+    padding: 1rem 1.25rem; /* More padding */
+    margin: 0.5rem 0;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.5rem; /* More rounded */
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 700;
+    transition: background-color 0.25s ease;
 }
 
 #newsletter-form button:hover {
-    opacity: 0.8;
+    background-color: #d44a33; /* Darker accent color */
 }
 
-@media (max-width: 736px) {
-    html {
-        font-size: 11pt;
+/* Media query updated to use rem for responsive adjustments. */
+@media (max-width: 46rem) { /* 736px / 16px = 46rem */
+    :root {
+        /* Adjust base font size on smaller screens for better readability. */
+        font-size: 14px;
     }
-    .inner {
-        padding: 1rem;
-    }
+.inner {
+    padding: 1rem;
+}
     hr {
         width: 15rem;
     }
