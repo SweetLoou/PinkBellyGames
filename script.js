@@ -89,9 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, {});
 
             // Set Logo
-            if (settings.logo && settings.logo.url) {
-                siteLogo.src = settings.logo.url;
-            } else if (typeof settings.logo === 'string') { // For backwards compatibility
+            if (settings.logo) {
                 siteLogo.src = settings.logo;
             }
 

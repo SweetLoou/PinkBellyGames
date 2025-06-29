@@ -21,6 +21,7 @@
                 <ul>
                     <li class="active"><a href="admin.html">Dashboard</a></li>
                     <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
+                    <li><a href="users.html">Users</a></li>
                     <li><a href="settings.html">Settings</a></li>
                 </ul>
             </nav>
@@ -41,111 +42,11 @@
                 </div>
             </div>
             <div class="content-panel">
-                <div class="panel-header">
-                    <h2>Subscribed Emails</h2>
-                    <div>
-                        <button id="refresh-button" class="button-primary">Refresh</button>
-                        <button id="csv-button" class="button-secondary">Download as CSV</button>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subscribers-list">
-                            <!-- Subscriber rows will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
+                <h2>Welcome to the Admin Panel</h2>
+                <p>Use the navigation on the left to manage your site.</p>
             </div>
         </main>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const subscribersList = document.getElementById('subscribers-list');
-            const subscribersCountEl = document.getElementById('subscribers-count');
-            const visitorsCountEl = document.getElementById('visitors-count');
-            const refreshButton = document.getElementById('refresh-button');
-            const csvButton = document.getElementById('csv-button');
-
-            async function fetchData() {
-                try {
-                    const response = await fetch('/api/dashboard');
-
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch dashboard data');
-                    }
-
-                    const data = await response.json();
-
-                    visitorsCountEl.textContent = data.visitors;
-                    subscribersCountEl.textContent = data.subscribersCount;
-                    
-                    subscribersList.innerHTML = ''; // Clear existing list
-                    
-                    data.subscribers.forEach(subscriber => {
-                        const row = document.createElement('tr');
-                        const emailCell = document.createElement('td');
-                        const dateCell = document.createElement('td');
-                        
-                        emailCell.textContent = subscriber.email;
-                        
-                        const utcDate = new Date(subscriber.subscribed_at);
-                        dateCell.textContent = utcDate.toLocaleString();
-                        
-                        row.appendChild(emailCell);
-                        row.appendChild(dateCell);
-                        subscribersList.appendChild(row);
-                    });
-
-                } catch (error) {
-                    console.error('Error fetching dashboard data:', error);
-                    alert('Could not load dashboard data.');
-                }
-            }
-
-            refreshButton.addEventListener('click', fetchData);
-
-            csvButton.addEventListener('click', async () => {
-                try {
-                    const res = await fetch('/api/dashboard');
-                    if (!res.ok) {
-                        throw new Error('Failed to fetch subscribers for CSV');
-                    }
-                    const data = await res.json();
-
-                    let csvContent = "data:text/csv;charset=utf-8,";
-                    csvContent += "Email,Time\n";
-
-                    data.subscribers.forEach(s => {
-                        const utcDate = new Date(s.subscribed_at);
-                        const row = `${s.email},"${utcDate.toLocaleString()}"`;
-                        csvContent += row + "\n";
-                    });
-
-                    const encodedUri = encodeURI(csvContent);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "subscribers.csv");
-                    document.body.appendChild(link); // Required for FF
-
-                    link.click();
-                    document.body.removeChild(link);
-
-                } catch (error) {
-                    console.error('Error generating CSV:', error);
-                    alert('Could not generate CSV file.');
-                }
-            });
-
-            // Initial fetch
-            fetchData();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

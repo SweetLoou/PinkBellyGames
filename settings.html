@@ -171,7 +171,7 @@
 
                         const { error: dbError } = await supabase
                             .from('settings')
-                            .upsert({ key: 'logo', value: { url: urlData.publicUrl } }, { onConflict: 'key' });
+                            .upsert({ key: 'logo', value: urlData.publicUrl }, { onConflict: 'key' });
 
                         if (dbError) throw dbError;
                         logoSuccess = true;
