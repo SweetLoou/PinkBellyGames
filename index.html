@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pink Belly Games</title>
     <meta name="description" content="Indie developer making video games and Unreal Engine plugins">
-    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="wrapper">
-        <div id="main">
+        <main>
             <div class="inner">
-                <div id="image01" class="image">
+                <div id="logo-container" class="image">
                     <span class="frame">
-                        <img src="PinkBellyGamesLogo.png" alt="Pink Belly Games Logo">
+                        <img src="1.png" alt="Pink Belly Games Logo" id="site-logo" class="logo logo-1" width="275" height="356">
                     </span>
                 </div>
                 <ul id="buttons02" class="buttons">
@@ -24,8 +23,11 @@
                     <li><a href="https://godotengine.org/" class="button n02" role="button" target="_blank" rel="noopener">Plugins</a></li>
                     <li><a href="#" id="newsletter-button" class="button n03" role="button">Newsletter</a></li>
                 </ul>
+                <div id="socials-container" class="socials">
+                    <!-- Social links will be dynamically loaded here -->
+                </div>
             </div>
-        </div>
+        </main>
     </div>
     <div id="newsletter-modal" class="modal">
         <div class="modal-content">
@@ -38,5 +40,6 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </body>
 </html>

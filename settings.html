@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+    <div class="admin-grid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="admin.html">Dashboard</a></li>
+                    <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
+                    <li class="active"><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Site Settings</h1>
+            </header>
+            <div class="content-panel">
+                <div class="panel-header">
+                    <h2>Customize Website</h2>
+                </div>
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="logo-upload">Upload Site Logo</label>
+                        <input type="file" id="logo-upload" name="logo" accept="image/*">
+                        <img id="logo-preview" src="" alt="Logo Preview">
+                    </div>
+                    <div class="form-group">
+                        <h3>Social Media Links</h3>
+                        <div id="social-links-container" class="scrollable-list">
+                        </div>
+                    </div>
+                    <button type="submit" class="button-primary">Save Settings</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoUpload = document.getElementById('logo-upload');
+            const logoPreview = document.getElementById('logo-preview');
+            const socialLinksContainer = document.getElementById('social-links-container');
+            const settingsForm = document.getElementById('settings-form');
+
+            const platforms = {
+                'Facebook': 'https://www.facebook.com/',
+                'Twitter': 'https://twitter.com/',
+                'Instagram': 'https://www.instagram.com/',
+                'Tiktok': 'https://www.tiktok.com/@',
+                'Youtube': 'https://www.youtube.com/@',
+                'Linkedin': 'https://www.linkedin.com/in/',
+                'Reddit': 'https://www.reddit.com/user/',
+                'Snapchat': 'https://www.snapchat.com/add/',
+                'Whatsapp': 'https://wa.me/',
+                'Telegram': 'https://t.me/',
+                'Discord': 'https://discord.gg/',
+                'Twitch': 'https://www.twitch.tv/',
+                'Patreon': 'https://www.patreon.com/',
+                'Github': 'https://github.com/',
+                'Artstation': 'https://www.artstation.com/',
+                'Spotify': 'https://open.spotify.com/user/',
+                'Kick': 'https://kick.com/',
+                'Bluesky': 'https://bsky.app/profile/',
+                'Threads': 'https://www.threads.net/@',
+                'Deviantart': 'https://www.deviantart.com/',
+                'Tumblr': 'https://www.tumblr.com/',
+                'Fandom': 'https://www.fandom.com/community/user/',
+                'Sketchfab': 'https://sketchfab.com/',
+                'Modrinth': 'https://modrinth.com/user/',
+                'Cruseforge': 'https://www.curseforge.com/members/',
+                'Kofi': 'https://ko-fi.com/',
+                'Paypal': 'https://www.paypal.me/',
+                'Stripe': 'https://',
+                'Notion': 'https://www.notion.so/',
+                'Trello': 'https://trello.com/u/',
+                'Android': 'https://play.google.com/store/apps/developer?id=',
+                'Apple': 'https://apps.apple.com/us/developer/',
+                'Microsoft': 'https://',
+                'Windows': 'https://',
+                'Google': 'https://',
+                'Minecraft': 'https://www.minecraft.net/users/',
+                'Teamspeak': 'ts3server://',
+                'Vk': 'https://vk.com/',
+                'Wikipedia': 'https://en.wikipedia.org/wiki/User:',
+                'Wise': 'https://',
+                'Promptpay': 'https://',
+                'Truewallet': 'https://',
+                'Qrcode': 'https://',
+                'Qrpayment': 'https://',
+                'Domain': 'https://',
+                'Patreon2': 'https://www.patreon.com/',
+                'Xtwitter': 'https://twitter.com/'
+            };
+
+            Object.keys(platforms).forEach(platform => {
+                addSocialLinkInput({ platform: platform, username: '' });
+            });
+
+            // Load existing settings
+            async function loadSettings() {
+                try {
+                    const response = await fetch('/admin/settings');
+                    const settings = await response.json();
+
+                    if (settings.logo) {
+                        logoPreview.src = settings.logo;
+                        logoPreview.style.display = 'block';
+                    }
+                    
+
+                    if (settings.socials && settings.socials.length > 0) {
+                        settings.socials.forEach(link => {
+                            const platformInput = document.querySelector(`.social-platform[value="${link.platform}"]`);
+                            if (platformInput) {
+                                const usernameInput = platformInput.nextElementSibling;
+                                const baseUrl = platforms[link.platform];
+                                if (baseUrl && link.url.startsWith(baseUrl)) {
+                                    usernameInput.value = link.url.substring(baseUrl.length);
+                                } else {
+                                    usernameInput.value = link.url;
+                                }
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                }
+            }
+
+            function addSocialLinkInput(link = { platform: '', username: '' }) {
+                const div = document.createElement('div');
+                div.classList.add('social-link-group');
+                div.innerHTML = `
+                    <input type="text" placeholder="Platform" value="${link.platform}" class="social-platform" readonly>
+                    <input type="text" placeholder="Username or ID" value="${link.username}" class="social-username">
+                `;
+                socialLinksContainer.appendChild(div);
+            }
+
+            logoUpload.addEventListener('change', () => {
+                const file = logoUpload.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        logoPreview.src = e.target.result;
+                        logoPreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+
+            settingsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData();
+                
+                // Logo
+                if (logoUpload.files[0]) {
+                    formData.append('logo', logoUpload.files[0]);
+                }
+
+
+                // Social Links
+                const socialLinks = [];
+                document.querySelectorAll('.social-link-group').forEach(group => {
+                    const platform = group.querySelector('.social-platform').value;
+                    const username = group.querySelector('.social-username').value;
+                    if (platform && username) {
+                        const baseUrl = platforms[platform];
+                        const url = baseUrl.endsWith('/') || baseUrl.endsWith('=') || baseUrl.endsWith('@') ? baseUrl + username : baseUrl;
+                        socialLinks.push({ platform, url });
+                    }
+                });
+                formData.append('socials', JSON.stringify(socialLinks));
+
+                try {
+                    const response = await fetch('/admin/settings', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('Settings saved successfully!');
+                    } else {
+                        const error = await response.json();
+                        alert('Error saving settings: ' + error.message);
+                    }
+                } catch (error) {
+                    console.error('Error saving settings:', error);
+                    alert('An error occurred while saving settings.');
+                }
+            });
+
+            loadSettings();
+        });
+    </script>
+</body>
+</html>

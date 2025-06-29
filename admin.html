@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+    <div class="admin-grid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin</h2>
+            </div>
+                <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="admin.html">Dashboard</a></li>
+                    <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Dashboard Overview</h1>
+            </header>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <h3>Visitors</h3>
+                    <p id="visitors-count">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Subscribers</h3>
+                    <p id="subscribers-count">0</p>
+                </div>
+            </div>
+            <div class="content-panel">
+                <div class="panel-header">
+                    <h2>Subscribed Emails</h2>
+                    <div>
+                        <button id="refresh-button" class="button-primary">Refresh</button>
+                        <button id="csv-button" class="button-secondary">Download as CSV</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscribers-list">
+                            <!-- Subscriber rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subscribersList = document.getElementById('subscribers-list');
+            const subscribersCountEl = document.getElementById('subscribers-count');
+            const visitorsCountEl = document.getElementById('visitors-count');
+            const refreshButton = document.getElementById('refresh-button');
+            const csvButton = document.getElementById('csv-button');
+
+            async function fetchData() {
+                try {
+                    // Fetch stats
+                    const statsResponse = await fetch('/admin/stats');
+                    if (!statsResponse.ok) throw new Error('Failed to fetch stats');
+                    const stats = await statsResponse.json();
+                    visitorsCountEl.textContent = stats.visitors;
+                    subscribersCountEl.textContent = stats.subscribers;
+
+                    // Fetch subscribers
+                    const subscribersResponse = await fetch('/admin/subscribers');
+                    if (!subscribersResponse.ok) throw new Error('Failed to fetch subscribers');
+                    const subscribers = await subscribersResponse.json();
+                    
+                    subscribersList.innerHTML = ''; // Clear existing list
+                    
+                    subscribers.forEach(subscriber => {
+                        const row = document.createElement('tr');
+                        const emailCell = document.createElement('td');
+                        const dateCell = document.createElement('td');
+                        
+                        emailCell.textContent = subscriber.email;
+                        
+                        const utcDate = new Date(subscriber.subscribed_at + 'Z');
+                        const estDate = new Date(utcDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                        dateCell.textContent = estDate.toLocaleString();
+                        
+                        row.appendChild(emailCell);
+                        row.appendChild(dateCell);
+                        subscribersList.appendChild(row);
+                    });
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Could not load dashboard data.');
+                }
+            }
+
+            refreshButton.addEventListener('click', fetchData);
+
+            csvButton.addEventListener('click', async () => {
+                try {
+                    const subscribersResponse = await fetch('/admin/subscribers');
+                    if (!subscribersResponse.ok) throw new Error('Failed to fetch subscribers');
+                    const subscribers = await subscribersResponse.json();
+
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "Email,Time\n";
+
+                    subscribers.forEach(s => {
+                        const estDate = new Date(new Date(s.subscribed_at + 'Z').toLocaleString('en-US', { timeZone: 'America/New_York' }));
+                        const row = `${s.email},"${estDate.toLocaleString()}"`;
+                        csvContent += row + "\n";
+                    });
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "subscribers.csv");
+                    document.body.appendChild(link); // Required for FF
+
+                    link.click();
+                    document.body.removeChild(link);
+
+                } catch (error) {
+                    console.error('Error generating CSV:', error);
+                    alert('Could not generate CSV file.');
+                }
+            });
+
+            // Initial fetch
+            fetchData();
+        });
+    </script>
+</body>
+</html>

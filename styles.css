@@ -1,10 +1,14 @@
 :root {
     /* Define the color palette for easy management and consistency. */
-    --color-background: #FDB813; /* Vintage Yellow */
+    --color-background: #FAFAFA; /* Light Grey */
     --color-foreground: #111111; /* Even Darker Grey */
     --color-accent: #FF6347; /* Tomato */
+    --color-sidebar-bg: #1a1a1a;
+    --color-sidebar-link: #ccc;
+    --color-sidebar-link-hover: #fff;
+    --color-sidebar-link-active: var(--color-accent);
 
-    /* Establish a root font size for responsive typography. Increased to scale layout up by 25%. */
+    /* Establish a root font size for responsive typography. */
     font-size: 18px;
 }
 
@@ -13,16 +17,16 @@ body {
     background-color: var(--color-background);
     background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
     background-size: 5px 5px;
+    transition: background-color 0.25s ease;
     color: var(--color-foreground);
     font-family: 'Press Start 2P', cursive;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align content to the top */
     min-height: 100vh;
     margin: 0;
     text-align: center;
     overflow: hidden;
-    zoom: 0.9;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -42,7 +46,7 @@ body {
 }
 
 .inner {
-    padding: 2rem;
+    padding: 2rem 2rem 2rem; /* Increased top padding */
 }
 
 .image .frame {
@@ -50,8 +54,13 @@ body {
     overflow: hidden;
     display: inline-block;
     width: auto;
-    max-width: 17rem; /* Adjust as needed */
-    margin-bottom: 2rem;
+    max-width: 14rem; /* Adjust as needed */
+    margin-bottom: 1.5rem;
+
+}
+
+body.belly-button-clicked .image .frame:hover {
+    transform: none;
 }
 
 
@@ -59,13 +68,53 @@ body {
     width: 100%;
     display: block;
     border-radius: 0; /* Ensure no radius is applied */
+
+}
+
+#logo-container .frame {
+    position: relative;
+}
+
+#logo-container .logo {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+#logo-container .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+
+}
+
+#logo-container .logo-1 {
+    position: relative;
+    opacity: 1;
+}
+
+#logo-container.step-2 .logo-1 {
+    opacity: 0;
+}
+
+#logo-container.step-2 .logo-2 {
+    opacity: 0;
+}
+
+#logo-container.step-3 .logo-2 {
+    opacity: 0;
+}
+
+#logo-container.step-3 .logo-3 {
+    opacity: 0;
 }
 
 
 .buttons {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 1.5rem;
     display: flex;
     flex-direction: column;
     /* Use clamp() for a fluid gap between a min and max value. */
@@ -171,7 +220,7 @@ body {
 @media (max-width: 46rem) { /* 736px / 16px = 46rem */
     :root {
         /* Adjust base font size on smaller screens for better readability. */
-        font-size: 14px;
+        font-size: 16px;
     }
 .inner {
     padding: 1rem;
@@ -183,4 +232,284 @@ body {
         width: 100%;
         max-width: 18rem;
     }
+}
+
+/* Social Media Icons */
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0;
+}
+
+.social-link {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.social-link .social-icon-hover {
+    display: none;
+}
+
+.social-link:hover .social-icon {
+    display: none;
+}
+
+.social-link:hover .social-icon-hover {
+    display: inline-block;
+}
+
+.social-icon {
+    width: 48px; /* Adjust size as needed */
+    height: 48px;
+}
+
+/* Admin Page Styles */
+body.admin-page {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    overflow-y: auto;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.sidebar {
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-sidebar-link);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+
+.sidebar-header h2 {
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 0.8rem 1rem;
+    color: var(--color-sidebar-link);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-nav li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-sidebar-link-hover);
+}
+
+.sidebar-nav li.active a {
+    background-color: var(--color-sidebar-link-active);
+    color: #fff;
+    font-weight: 700;
+}
+
+.main-content {
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.main-header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.8rem;
+    margin: 0 0 2rem 0;
+    color: #222;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-box {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.stat-box h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.stat-box p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+.content-panel {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.button-primary, .button-secondary {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.button-primary {
+    background-color: var(--color-accent);
+    color: #fff;
+}
+
+.button-primary:hover {
+    background-color: #d44a33;
+}
+
+.button-primary:active, .button-secondary:active {
+    transform: translateY(1px);
+}
+
+.button-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.button-secondary:hover {
+    background-color: #ccc;
+}
+
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+tbody tr:hover {
+    background-color: #f4f7fa;
+}
+
+/* Settings Page Specific Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.form-group input[type="file"],
+.form-group input[type="text"],
+.form-group input[type="url"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+}
+
+.website-link-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.website-link-group input {
+    flex-grow: 1;
+}
+
+.social-link-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.social-link-group input {
+    flex-grow: 1;
+}
+
+.remove-social-link {
+    padding: 0.5rem 1rem;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.remove-social-link:hover {
+    background-color: #c0392b;
+}
+
+#logo-preview {
+    max-width: 150px;
+    margin-top: 1rem;
+    display: none;
+}
+
+.scrollable-list {
+    max-height: 300px; /* Adjust as needed */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
