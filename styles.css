@@ -1,9 +1,7 @@
 :root {
-    --color-background: #1F9532;
-    --color-foreground: #FFFFFF;
-    --color-accent: #C9C102;
-    --color-button: #000000;
-    --color-button-text: #F2C527;
+    --color-background: #f2c527;
+    --color-foreground: #1a1a1a;
+    --color-accent: #e53935;
     --twitter-color: #1DA1F2;
     --tiktok-color: #000000;
     --instagram-color: #E4405F;
@@ -11,12 +9,14 @@
     --discord-color: #7289DA;
 }
 
-html {
-    font-size: 18pt;
-}
-
 body {
     background-color: var(--color-background);
+    background-image:
+        radial-gradient(circle at 25% 25%, var(--color-foreground) 2%, transparent 0),
+        radial-gradient(circle at 75% 25%, var(--color-foreground) 2%, transparent 0),
+        radial-gradient(circle at 25% 75%, var(--color-foreground) 2%, transparent 0),
+        radial-gradient(circle at 75% 75%, var(--color-foreground) 2%, transparent 0);
+    background-size: 10px 10px;
     color: var(--color-foreground);
     font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     display: flex;
@@ -60,7 +60,7 @@ hr {
     border: 0;
     height: 5px;
     width: 20rem;
-    background-color: var(--color-accent);
+    background-color: var(--color-foreground);
     border-radius: 11px;
     margin: 1.5rem auto;
 }
@@ -81,17 +81,18 @@ hr {
     height: 2.75rem;
     line-height: 2.75rem;
     padding: 0 0.5rem;
-    background-color: var(--color-button);
-    color: var(--color-button-text);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 700;
     border-radius: 0.875rem;
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, background-color 0.25s ease;
 }
 
 .buttons li a:hover {
     transform: scale(1.06);
+    background-color: var(--color-accent);
 }
 
 .icons {
@@ -170,8 +171,8 @@ hr {
 
 #newsletter-form button {
     width: 80%;
-    background-color: var(--color-button);
-    color: var(--color-button-text);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
