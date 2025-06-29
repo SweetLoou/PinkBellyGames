@@ -21,7 +21,6 @@
                 <ul>
                     <li class="active"><a href="admin.html">Dashboard</a></li>
                     <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
-                    <li><a href="users.html">Users</a></li>
                     <li><a href="settings.html">Settings</a></li>
                 </ul>
             </nav>
@@ -42,11 +41,109 @@
                 </div>
             </div>
             <div class="content-panel">
-                <h2>Welcome to the Admin Panel</h2>
-                <p>Use the navigation on the left to manage your site.</p>
+                <div class="panel-header">
+                    <h2>Subscribed Emails</h2>
+                    <div>
+                        <button id="refresh-button" class="button-primary">Refresh</button>
+                        <button id="csv-button" class="button-secondary">Download as CSV</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscribers-list">
+                            <!-- Subscriber rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subscribersList = document.getElementById('subscribers-list');
+            const refreshButton = document.getElementById('refresh-button');
+            const csvButton = document.getElementById('csv-button');
+
+            const supabaseUrl = 'https://nabbbowykckcfsixxgws.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            async function fetchData() {
+                try {
+                    const { data, error } = await supabase
+                        .from('subscribers')
+                        .select('email, subscribed_at')
+                        .order('subscribed_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    subscribersList.innerHTML = ''; // Clear existing list
+                    
+                    data.forEach(subscriber => {
+                        const row = document.createElement('tr');
+                        const emailCell = document.createElement('td');
+                        const dateCell = document.createElement('td');
+                        
+                        emailCell.textContent = subscriber.email;
+                        
+                        const utcDate = new Date(subscriber.subscribed_at);
+                        dateCell.textContent = utcDate.toLocaleString();
+                        
+                        row.appendChild(emailCell);
+                        row.appendChild(dateCell);
+                        subscribersList.appendChild(row);
+                    });
+
+                } catch (error) {
+                    console.error('Error fetching subscribers:', error);
+                    alert('Could not load subscribers.');
+                }
+            }
+
+            refreshButton.addEventListener('click', fetchData);
+
+            csvButton.addEventListener('click', async () => {
+                try {
+                    const { data, error } = await supabase
+                        .from('subscribers')
+                        .select('email, subscribed_at')
+                        .order('subscribed_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "Email,Time\n";
+
+                    data.forEach(s => {
+                        const utcDate = new Date(s.subscribed_at);
+                        const row = `${s.email},"${utcDate.toLocaleString()}"`;
+                        csvContent += row + "\n";
+                    });
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "subscribers.csv");
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+
+                } catch (error) {
+                    console.error('Error generating CSV:', error);
+                    alert('Could not generate CSV file.');
+                }
+            });
+
+            fetchData();
+        });
+    </script>
 </body>
 </html>
