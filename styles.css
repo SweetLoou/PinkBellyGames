@@ -1,0 +1,202 @@
+:root {
+    --color-background: #1F9532;
+    --color-foreground: #FFFFFF;
+    --color-accent: #C9C102;
+    --color-button: #000000;
+    --color-button-text: #F2C527;
+    --twitter-color: #1DA1F2;
+    --tiktok-color: #000000;
+    --instagram-color: #E4405F;
+    --telegram-color: #26A5E4;
+    --discord-color: #7289DA;
+}
+
+html {
+    font-size: 18pt;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+#wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#main {
+    width: 100%;
+    max-width: 45rem;
+}
+
+.inner {
+    padding: 2rem;
+}
+
+.image .frame {
+    display: inline-block;
+    width: 11.375rem;
+    border-radius: 100%;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.image .frame img {
+    width: 100%;
+    display: block;
+}
+
+hr {
+    border: 0;
+    height: 5px;
+    width: 20rem;
+    background-color: var(--color-accent);
+    border-radius: 11px;
+    margin: 1.5rem auto;
+}
+
+.buttons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.buttons li a {
+    display: inline-block;
+    width: 19rem;
+    height: 2.75rem;
+    line-height: 2.75rem;
+    padding: 0 0.5rem;
+    background-color: var(--color-button);
+    color: var(--color-button-text);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 0.875rem;
+    transition: transform 0.25s ease;
+}
+
+.buttons li a:hover {
+    transform: scale(1.06);
+}
+
+.icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1.75em;
+}
+
+.icons li a {
+    color: var(--color-foreground);
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.icons li a:hover {
+    transform: scale(1.1475);
+}
+
+.icons .n01:hover { color: var(--twitter-color); }
+.icons .n02:hover { color: var(--tiktok-color); }
+.icons .n03:hover { color: var(--instagram-color); }
+.icons .n04:hover { color: var(--telegram-color); }
+.icons .n05:hover { color: var(--discord-color); }
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 1rem;
+    text-align: center;
+    color: #000;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#newsletter-form input[type="email"] {
+    width: 80%;
+    padding: 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#newsletter-form button {
+    width: 80%;
+    background-color: var(--color-button);
+    color: var(--color-button-text);
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+#newsletter-form button:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 736px) {
+    html {
+        font-size: 11pt;
+    }
+    .inner {
+        padding: 1rem;
+    }
+    hr {
+        width: 15rem;
+    }
+    .buttons li a {
+        width: 100%;
+        max-width: 18rem;
+    }
+}
