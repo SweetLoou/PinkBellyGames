@@ -81,13 +81,51 @@ document.addEventListener('DOMContentLoaded', () => {
             // Load Social Links
             if (settings.socials && settings.socials.length > 0) {
                 socialsContainer.innerHTML = '';
+                const socialUrlTemplates = {
+                    'twitter': 'https://twitter.com/{username}',
+                    'xtwitter': 'https://x.com/{username}',
+                    'github': 'https://github.com/{username}',
+                    'linkedin': 'https://linkedin.com/in/{username}',
+                    'facebook': 'https://facebook.com/{username}',
+                    'instagram': 'https://instagram.com/{username}',
+                    'discord': 'https://discord.gg/{username}',
+                    'youtube': 'https://youtube.com/@{username}',
+                    'twitch': 'https://twitch.tv/{username}',
+                    'patreon': 'https://patreon.com/{username}',
+                    'kick': 'https://kick.com/{username}',
+                    'kofi': 'https://ko-fi.com/{username}',
+                    'artstation': 'https://www.artstation.com/{username}',
+                    'bluesky': 'https://bsky.app/profile/{username}',
+                    'cruseforge': 'https://www.curseforge.com/members/{username}/projects',
+                    'deviantart': 'https://www.deviantart.com/{username}',
+                    'fandom': 'https://www.fandom.com/u/{username}',
+                    'modrinth': 'https://modrinth.com/user/{username}',
+                    'sketchfab': 'https://sketchfab.com/{username}',
+                    'snapchat': 'https://www.snapchat.com/add/{username}',
+                    'spotify': 'https://open.spotify.com/user/{username}',
+                    'teamspeak': 'ts3server://{username}',
+                    'telegram': 'https://t.me/{username}',
+                    'threads': 'https://www.threads.net/@{username}',
+                    'tiktok': 'https://www.tiktok.com/@{username}',
+                    'trello': 'https://trello.com/u/{username}',
+                    'tumblr': 'https://{username}.tumblr.com',
+                    'vk': 'https://vk.com/{username}',
+                    'whatsapp': 'https://wa.me/{username}',
+                    'wikipedia': 'https://en.wikipedia.org/wiki/User:{username}',
+                };
+
                 settings.socials.forEach(link => {
-                    if (!link.url) return; // Skip if no URL
+                    if (!link.username) return; // Skip if no username
+
                     const platform = link.platform.toLowerCase();
+                    const urlTemplate = socialUrlTemplates[platform];
+                    if (!urlTemplate) return; // Skip if no template for this platform
+
+                    const url = urlTemplate.replace('{username}', link.username);
                     const iconName = platform === 'x' ? 'xtwitter' : platform;
                     
                     const linkElement = document.createElement('a');
-                    linkElement.href = link.url;
+                    linkElement.href = url;
                     linkElement.classList.add('social-link');
                     linkElement.target = '_blank';
                     linkElement.rel = 'noopener';

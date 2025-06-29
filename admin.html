@@ -71,36 +71,24 @@
             const refreshButton = document.getElementById('refresh-button');
             const csvButton = document.getElementById('csv-button');
 
-            const supabaseUrl = 'https://nabbbowykckcfsixxgws.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
             async function fetchData() {
                 try {
-                    // Fetch stats
-                    const { data: stats, error: statsError } = await supabase
-                        .from('site_stats')
-                        .select('value')
-                        .eq('key', 'visitors')
-                        .single();
+                    const [visitorsRes, subscribersCountRes, subscribersListRes] = await Promise.all([
+                        fetch('/api/stats/visitors'),
+                        fetch('/api/subscribers/count'),
+                        fetch('/api/subscribers')
+                    ]);
 
-                    if (statsError) throw statsError;
-                    visitorsCountEl.textContent = stats.value;
+                    if (!visitorsRes.ok || !subscribersCountRes.ok || !subscribersListRes.ok) {
+                        throw new Error('Failed to fetch dashboard data');
+                    }
 
-                    const { count, error: subscribersError } = await supabase
-                        .from('subscribers')
-                        .select('*', { count: 'exact' });
+                    const visitorsData = await visitorsRes.json();
+                    const subscribersCountData = await subscribersCountRes.json();
+                    const subscribers = await subscribersListRes.json();
 
-                    if (subscribersError) throw subscribersError;
-                    subscribersCountEl.textContent = count;
-
-                    // Fetch subscribers
-                    const { data: subscribers, error: subscribersListError } = await supabase
-                        .from('subscribers')
-                        .select('email, subscribed_at')
-                        .order('subscribed_at', { ascending: false });
-
-                    if (subscribersListError) throw subscribersListError;
+                    visitorsCountEl.textContent = visitorsData.visitors;
+                    subscribersCountEl.textContent = subscribersCountData.count;
                     
                     subscribersList.innerHTML = ''; // Clear existing list
                     
@@ -120,7 +108,7 @@
                     });
 
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error fetching dashboard data:', error);
                     alert('Could not load dashboard data.');
                 }
             }
@@ -129,12 +117,11 @@
 
             csvButton.addEventListener('click', async () => {
                 try {
-                    const { data: subscribers, error } = await supabase
-                        .from('subscribers')
-                        .select('email, subscribed_at')
-                        .order('subscribed_at', { ascending: false });
-
-                    if (error) throw error;
+                    const res = await fetch('/api/subscribers');
+                    if (!res.ok) {
+                        throw new Error('Failed to fetch subscribers for CSV');
+                    }
+                    const subscribers = await res.json();
 
                     let csvContent = "data:text/csv;charset=utf-8,";
                     csvContent += "Email,Time\n";

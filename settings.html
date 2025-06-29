@@ -30,19 +30,32 @@
             </header>
             <div class="content-panel">
                 <form id="settings-form">
-                    <div class="form-group">
-                        <label for="logo-upload">Logo</label>
-                        <input type="file" id="logo-upload" name="logo" accept="image/*">
-                        <img id="logo-preview" src="#" alt="Logo Preview">
-                    </div>
-                    <div class="form-group">
-                        <label>Social Links</label>
-                        <div id="social-links-container" class="scrollable-list">
-                            <!-- Social link inputs will be dynamically added here -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Branding</h3>
                         </div>
-                        <button type="button" id="add-social-link" class="button-secondary">Add Social Link</button>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="logo-upload">Logo</label>
+                                <input type="file" id="logo-upload" name="logo" accept="image/*">
+                                <img id="logo-preview" src="#" alt="Logo Preview">
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="button-primary">Save Settings</button>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Social Links</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="social-links-container" class="scrollable-list">
+                                <!-- Social link inputs will be dynamically added here -->
+                            </div>
+                            <button type="button" id="add-social-link" class="button-secondary">Add Social Link</button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="button-primary">Save Settings</button>
+                    </div>
                 </form>
             </div>
         </main>
@@ -87,14 +100,36 @@
                 }
             }
 
-            function addSocialLinkInput(link = { platform: '', url: '' }) {
+            function addSocialLinkInput(link = { platform: '', username: '' }) {
                 const div = document.createElement('div');
                 div.classList.add('social-link-group');
+
+                const platforms = [
+                    'android', 'apple', 'artstation', 'bluesky', 'cruseforge', 'deviantart', 'discord', 'domain',
+                    'facebook', 'fandom', 'github', 'google', 'instagram', 'kick', 'kofi', 'linkedin', 'microsoft',
+                    'minecraft', 'modrinth', 'notion', 'patreon', 'patreon2', 'paypal', 'promptpay', 'qrcode',
+                    'qrpayment', 'reddit', 'sketchfab', 'snapchat', 'spotify', 'stripe', 'teamspeak', 'telegram',
+                    'threads', 'tiktok', 'trello', 'truewallet', 'tumblr', 'twitch', 'twitter', 'vk', 'whatsapp',
+                    'wikipedia', 'windows', 'wise', 'xtwitter', 'youtube'
+                ];
+
+                const select = document.createElement('select');
+                select.classList.add('social-platform');
+                platforms.forEach(platform => {
+                    const option = document.createElement('option');
+                    option.value = platform;
+                    option.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
+                    if (link.platform === platform) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+
                 div.innerHTML = `
-                    <input type="text" placeholder="Platform (e.g., twitter)" value="${link.platform}" class="social-platform">
-                    <input type="url" placeholder="URL" value="${link.url}" class="social-url">
+                    <input type="text" placeholder="Username/ID" value="${link.username}" class="social-username">
                     <button type="button" class="remove-social-link">Remove</button>
                 `;
+                div.insertBefore(select, div.firstChild);
                 socialLinksContainer.appendChild(div);
                 div.querySelector('.remove-social-link').addEventListener('click', () => div.remove());
             }
@@ -139,9 +174,9 @@
                     const socialLinks = [];
                     socialLinksContainer.querySelectorAll('.social-link-group').forEach(group => {
                         const platform = group.querySelector('.social-platform').value;
-                        const url = group.querySelector('.social-url').value;
-                        if (platform && url) {
-                            socialLinks.push({ platform, url });
+                        const username = group.querySelector('.social-username').value;
+                        if (platform && username) {
+                            socialLinks.push({ platform, username });
                         }
                     });
 

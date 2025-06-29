@@ -446,8 +446,37 @@ tbody tr:hover {
 }
 
 /* Settings Page Specific Styles */
+.card {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
+}
+
+.form-actions {
+    text-align: right;
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
 }
 
 .form-group label {
@@ -477,14 +506,27 @@ tbody tr:hover {
 }
 
 .social-link-group {
-    display: flex;
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
     gap: 1rem;
     margin-bottom: 1rem;
     align-items: center;
 }
 
-.social-link-group input {
-    flex-grow: 1;
+.social-link-group .social-platform {
+    width: 100%;
+}
+
+.social-link-group .social-username {
+    width: 100%;
+}
+
+.social-link-group input,
+.social-link-group select {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
 }
 
 .remove-social-link {
