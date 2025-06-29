@@ -15,8 +15,9 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Admin</h2>
+                <button class="menu-toggle" id="sidebar-toggle-close">&times;</button>
             </div>
-                <nav class="sidebar-nav">
+            <nav class="sidebar-nav">
                 <ul>
                     <li class="active"><a href="admin.html">Dashboard</a></li>
                     <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
@@ -26,6 +27,7 @@
         </aside>
         <main class="main-content">
             <header class="main-header">
+                <button class="menu-toggle" id="sidebar-toggle-open">&#9776;</button>
                 <h1>Dashboard Overview</h1>
             </header>
             <div class="stats-container">
@@ -73,26 +75,20 @@
 
             async function fetchData() {
                 try {
-                    const [visitorsRes, subscribersCountRes, subscribersListRes] = await Promise.all([
-                        fetch('/api/stats/visitors'),
-                        fetch('/api/subscribers/count'),
-                        fetch('/api/subscribers')
-                    ]);
+                    const response = await fetch('/api/dashboard');
 
-                    if (!visitorsRes.ok || !subscribersCountRes.ok || !subscribersListRes.ok) {
+                    if (!response.ok) {
                         throw new Error('Failed to fetch dashboard data');
                     }
 
-                    const visitorsData = await visitorsRes.json();
-                    const subscribersCountData = await subscribersCountRes.json();
-                    const subscribers = await subscribersListRes.json();
+                    const data = await response.json();
 
-                    visitorsCountEl.textContent = visitorsData.visitors;
-                    subscribersCountEl.textContent = subscribersCountData.count;
+                    visitorsCountEl.textContent = data.visitors;
+                    subscribersCountEl.textContent = data.subscribersCount;
                     
                     subscribersList.innerHTML = ''; // Clear existing list
                     
-                    subscribers.forEach(subscriber => {
+                    data.subscribers.forEach(subscriber => {
                         const row = document.createElement('tr');
                         const emailCell = document.createElement('td');
                         const dateCell = document.createElement('td');
@@ -117,16 +113,16 @@
 
             csvButton.addEventListener('click', async () => {
                 try {
-                    const res = await fetch('/api/subscribers');
+                    const res = await fetch('/api/dashboard');
                     if (!res.ok) {
                         throw new Error('Failed to fetch subscribers for CSV');
                     }
-                    const subscribers = await res.json();
+                    const data = await res.json();
 
                     let csvContent = "data:text/csv;charset=utf-8,";
                     csvContent += "Email,Time\n";
 
-                    subscribers.forEach(s => {
+                    data.subscribers.forEach(s => {
                         const utcDate = new Date(s.subscribed_at);
                         const row = `${s.email},"${utcDate.toLocaleString()}"`;
                         csvContent += row + "\n";

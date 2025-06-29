@@ -15,6 +15,7 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Admin</h2>
+                <button class="menu-toggle" id="sidebar-toggle-close">&times;</button>
             </div>
             <nav class="sidebar-nav">
                 <ul>
@@ -26,6 +27,7 @@
         </aside>
         <main class="main-content">
             <header class="main-header">
+                <button class="menu-toggle" id="sidebar-toggle-open">&#9776;</button>
                 <h1>Settings</h1>
             </header>
             <div class="content-panel">
@@ -105,12 +107,12 @@
                 div.classList.add('social-link-group');
 
                 const platforms = [
-                    'android', 'apple', 'artstation', 'bluesky', 'cruseforge', 'deviantart', 'discord', 'domain',
-                    'facebook', 'fandom', 'github', 'google', 'instagram', 'kick', 'kofi', 'linkedin', 'microsoft',
-                    'minecraft', 'modrinth', 'notion', 'patreon', 'patreon2', 'paypal', 'promptpay', 'qrcode',
-                    'qrpayment', 'reddit', 'sketchfab', 'snapchat', 'spotify', 'stripe', 'teamspeak', 'telegram',
-                    'threads', 'tiktok', 'trello', 'truewallet', 'tumblr', 'twitch', 'twitter', 'vk', 'whatsapp',
-                    'wikipedia', 'windows', 'wise', 'xtwitter', 'youtube'
+                    'youtube', 'xtwitter', 'twitter', 'twitch', 'tiktok', 'threads', 'telegram', 'teamspeak', 'spotify', 'snapchat',
+                    'reddit', 'patreon', 'patreon2', 'paypal', 'kofi', 'kick', 'instagram', 'github', 'facebook', 'discord',
+                    'bluesky', 'artstation', 'linkedin', 'whatsapp', 'vk', 'tumblr', 'trello', 'truewallet', 'stripe',
+                    'spotify', 'sketchfab', 'qrpayment', 'qrcode', 'promptpay', 'notion', 'modrinth', 'minecraft',
+                    'microsoft', 'google', 'fandom', 'domain', 'deviantart', 'cruseforge', 'apple', 'android',
+                    'wikipedia', 'windows', 'wise'
                 ];
 
                 const select = document.createElement('select');
@@ -150,27 +152,39 @@
             settingsForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                try {
-                    // Handle logo upload
-                    const logoFile = logoUpload.files[0];
-                    if (logoFile) {
+                let logoSuccess = false;
+                let socialsSuccess = false;
+
+                // Handle logo upload
+                const logoFile = logoUpload.files[0];
+                if (logoFile) {
+                    try {
                         const { data: uploadData, error: uploadError } = await supabase.storage
                             .from('public')
-                            .upload(`logos/${Date.now()}_${logoFile.name}`, logoFile);
+                            .upload(`logos/${Date.now()}_${logoFile.name}`, logoFile, {
+                                upsert: true
+                            });
 
                         if (uploadError) throw uploadError;
 
                         const { data: urlData } = supabase.storage.from('public').getPublicUrl(uploadData.path);
-                        
+
                         const { error: dbError } = await supabase
                             .from('settings')
-                            .update({ value: { url: urlData.publicUrl } })
-                            .eq('key', 'logo');
+                            .upsert({ key: 'logo', value: { url: urlData.publicUrl } }, { onConflict: 'key' });
 
                         if (dbError) throw dbError;
+                        logoSuccess = true;
+                    } catch (error) {
+                        console.error('Error uploading logo:', error);
+                        alert('Failed to upload logo.');
                     }
+                } else {
+                    logoSuccess = true; // No new logo to upload, so we can consider it a success
+                }
 
-                    // Handle social links
+                // Handle social links
+                try {
                     const socialLinks = [];
                     socialLinksContainer.querySelectorAll('.social-link-group').forEach(group => {
                         const platform = group.querySelector('.social-platform').value;
@@ -182,16 +196,25 @@
 
                     const { error: socialsError } = await supabase
                         .from('settings')
-                        .update({ value: socialLinks })
-                        .eq('key', 'socials');
+                        .upsert({ key: 'socials', value: socialLinks }, { onConflict: 'key' });
 
                     if (socialsError) throw socialsError;
-
-                    alert('Settings saved successfully!');
-
+                    socialsSuccess = true;
                 } catch (error) {
-                    console.error('Error saving settings:', error);
-                    alert('Failed to save settings.');
+                    console.error('Error saving social links:', error);
+                    alert('Failed to save social links.');
+                }
+
+                if (logoFile && logoSuccess) {
+                    alert('Logo uploaded successfully!');
+                }
+                
+                if (socialsSuccess) {
+                    alert('Social links saved successfully!');
+                }
+
+                if ((logoFile && logoSuccess && socialsSuccess) || (!logoFile && socialsSuccess)) {
+                    alert('All settings saved successfully!');
                 }
             });
 

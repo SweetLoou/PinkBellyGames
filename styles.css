@@ -300,6 +300,15 @@ body.admin-page {
     margin: 0;
 }
 
+.sidebar-header .menu-toggle {
+    display: none; /* Hide by default on larger screens */
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
 .sidebar-nav ul {
     list-style: none;
     padding: 0;
@@ -554,4 +563,94 @@ tbody tr:hover {
     border: 1px solid #ccc;
     padding: 1rem;
     border-radius: 0.5rem;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 992px) {
+    .admin-grid {
+        grid-template-columns: 200px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -250px; /* Start off-screen */
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        height: 100vh; /* Full height */
+    }
+
+    .sidebar.active {
+        left: 0; /* Slide in when active */
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .sidebar-header .menu-toggle {
+        display: block; /* Show on smaller screens */
+    }
+
+    .main-content {
+        padding-top: 4rem; /* Add padding to avoid content being hidden by a potential top bar */
+    }
+    
+    .main-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .main-header .menu-toggle {
+        display: block; /* Show hamburger in main header */
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-link-group {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .social-link-group .remove-social-link {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        font-size: 14px;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .buttons li a {
+        width: 100%;
+        font-size: 1rem;
+    }
 }

@@ -10,6 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+    // Sidebar Toggle Functionality
+    const sidebar = document.querySelector('.sidebar');
+    const openToggle = document.getElementById('sidebar-toggle-open');
+    const closeToggle = document.getElementById('sidebar-toggle-close');
+
+    if (sidebar && openToggle && closeToggle) {
+        openToggle.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeToggle.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+    }
+
     // Modal functionality
     newsletterButton.addEventListener('click', () => {
         modal.style.display = 'block';
@@ -76,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set Logo
             if (settings.logo && settings.logo.url) {
                 siteLogo.src = settings.logo.url;
+            } else if (typeof settings.logo === 'string') { // For backwards compatibility
+                siteLogo.src = settings.logo;
             }
 
             // Load Social Links
