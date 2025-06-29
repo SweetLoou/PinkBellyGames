@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, {});
 
             // Set Logo
-            if (settings.logo) {
-                siteLogo.src = settings.logo;
+            if (settings.logo && settings.logo.url) {
+                siteLogo.src = settings.logo.url;
             }
 
             // Load Social Links

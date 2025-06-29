@@ -164,7 +164,7 @@
                         
                         const { error: dbError } = await supabase
                             .from('settings')
-                            .update({ value: `"${urlData.publicUrl}"` })
+                            .update({ value: { url: urlData.publicUrl } })
                             .eq('key', 'logo');
 
                         if (dbError) throw dbError;
@@ -182,7 +182,7 @@
 
                     const { error: socialsError } = await supabase
                         .from('settings')
-                        .update({ value: JSON.stringify(socialLinks) })
+                        .update({ value: socialLinks })
                         .eq('key', 'socials');
 
                     if (socialsError) throw socialsError;
