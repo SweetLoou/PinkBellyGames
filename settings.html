@@ -151,69 +151,54 @@
 
             settingsForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-
-                let logoSuccess = false;
-                let socialsSuccess = false;
+                let anyErrors = false;
 
                 // Handle logo upload
                 const logoFile = logoUpload.files[0];
                 if (logoFile) {
-                    try {
-                        const { data: uploadData, error: uploadError } = await supabase.storage
-                            .from('public')
-                            .upload(`logos/${Date.now()}_${logoFile.name}`, logoFile, {
-                                upsert: true
-                            });
+                    const filePath = `logos/${Date.now()}_${logoFile.name}`;
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('public')
+                        .upload(filePath, logoFile, { upsert: true });
 
-                        if (uploadError) throw uploadError;
-
+                    if (uploadError) {
+                        alert(`Logo Upload Error: ${uploadError.message}`);
+                        console.error('Logo Upload Error:', uploadError);
+                        anyErrors = true;
+                    } else {
                         const { data: urlData } = supabase.storage.from('public').getPublicUrl(uploadData.path);
-
                         const { error: dbError } = await supabase
                             .from('settings')
                             .upsert({ key: 'logo', value: urlData.publicUrl }, { onConflict: 'key' });
 
-                        if (dbError) throw dbError;
-                        logoSuccess = true;
-                    } catch (error) {
-                        console.error('Error uploading logo:', error);
-                        alert('Failed to upload logo.');
+                        if (dbError) {
+                            alert(`Database Error (Logo): ${dbError.message}`);
+                            console.error('Database Error (Logo):', dbError);
+                            anyErrors = true;
+                        }
                     }
-                } else {
-                    logoSuccess = true; // No new logo to upload, so we can consider it a success
                 }
 
                 // Handle social links
-                try {
-                    const socialLinks = [];
-                    socialLinksContainer.querySelectorAll('.social-link-group').forEach(group => {
+                const socialLinks = Array.from(socialLinksContainer.querySelectorAll('.social-link-group'))
+                    .map(group => {
                         const platform = group.querySelector('.social-platform').value;
                         const username = group.querySelector('.social-username').value;
-                        if (platform && username) {
-                            socialLinks.push({ platform, username });
-                        }
-                    });
+                        return (platform && username) ? { platform, username } : null;
+                    })
+                    .filter(Boolean);
 
-                    const { error: socialsError } = await supabase
-                        .from('settings')
-                        .upsert({ key: 'socials', value: socialLinks }, { onConflict: 'key' });
+                const { error: socialsError } = await supabase
+                    .from('settings')
+                    .upsert({ key: 'socials', value: socialLinks }, { onConflict: 'key' });
 
-                    if (socialsError) throw socialsError;
-                    socialsSuccess = true;
-                } catch (error) {
-                    console.error('Error saving social links:', error);
-                    alert('Failed to save social links.');
+                if (socialsError) {
+                    alert(`Social Links Error: ${socialsError.message}`);
+                    console.error('Social Links Error:', socialsError);
+                    anyErrors = true;
                 }
 
-                if (logoFile && logoSuccess) {
-                    alert('Logo uploaded successfully!');
-                }
-                
-                if (socialsSuccess) {
-                    alert('Social links saved successfully!');
-                }
-
-                if ((logoFile && logoSuccess && socialsSuccess) || (!logoFile && socialsSuccess)) {
+                if (!anyErrors) {
                     alert('All settings saved successfully!');
                 }
             });
