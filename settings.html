@@ -1,210 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Settings</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body class="admin-page">
-    <div class="admin-grid">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin</h2>
-                <button class="menu-toggle" id="sidebar-toggle-close">&times;</button>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="admin.html">Dashboard</a></li>
-                    <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
-                    <li class="active"><a href="settings.html">Settings</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="main-content">
-            <header class="main-header">
-                <button class="menu-toggle" id="sidebar-toggle-open">&#9776;</button>
-                <h1>Settings</h1>
-            </header>
-            <div class="content-panel">
-                <form id="settings-form">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Branding</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="logo-upload">Logo</label>
-                                <input type="file" id="logo-upload" name="logo" accept="image/*">
-                                <img id="logo-preview" src="#" alt="Logo Preview">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Settings</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="public/CSS/styles.css" />
+        <link rel="stylesheet" href="public/CSS/admin.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </head>
+    <body class="admin-page">
+        <div class="admin-grid">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Admin</h2>
+                    <button class="menu-toggle" id="sidebar-toggle-close">
+                        &times;
+                    </button>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="admin.html">Dashboard</a></li>
+                        <li>
+                            <button id="preview-button" class="button-like-link">Preview</button>
+                        </li>
+                        <li class="active">
+                            <a href="settings.html">Settings</a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <button class="menu-toggle" id="sidebar-toggle-open">
+                        &#9776;
+                    </button>
+                    <h1>Settings</h1>
+                </header>
+                <div class="content-panel">
+                    <form id="settings-form">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Branding</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="logo-upload">Logo</label>
+                                    <input
+                                        type="file"
+                                        id="logo-upload"
+                                        name="logo"
+                                        accept="image/*"
+                                    />
+                                    <img
+                                        id="logo-preview"
+                                        src="#"
+                                        alt="Logo Preview"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Social Links</h3>
-                        </div>
-                        <div class="card-body">
-                            <div id="social-links-container" class="scrollable-list">
-                                <!-- Social link inputs will be dynamically added here -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Social Links</h3>
                             </div>
-                            <button type="button" id="add-social-link" class="button-secondary">Add Social Link</button>
+                            <div class="card-body">
+                                <div
+                                    id="social-links-container"
+                                    class="scrollable-list"
+                                >
+                                    <!-- Social link inputs will be dynamically added here -->
+                                </div>
+                                <button
+                                    type="button"
+                                    id="add-social-link"
+                                    class="button-secondary"
+                                >
+                                    Add Social Link
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="button-primary">Save Settings</button>
-                    </div>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="button-primary">
+                                Save Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <div id="preview-popup" class="preview-popup-container">
+            <div class="preview-popup-content">
+                <iframe id="preview-iframe" title="Website Preview" src="https://sweetloou.github.io/PinkBellyGames/"></iframe>
+                <button id="close-popup" class="button-secondary">Close</button>
             </div>
-        </main>
-    </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const settingsForm = document.getElementById('settings-form');
+                const logoUpload = document.getElementById('logo-upload');
+                const logoPreview = document.getElementById('logo-preview');
+                const socialLinksContainer = document.getElementById(
+                    'social-links-container'
+                );
+                const addSocialLinkButton =
+                    document.getElementById('add-social-link');
+                const previewButton = document.getElementById('preview-button');
+                const previewPopup = document.getElementById('preview-popup');
+                const closePopupButton = document.getElementById('close-popup');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const settingsForm = document.getElementById('settings-form');
-            const logoUpload = document.getElementById('logo-upload');
-            const logoPreview = document.getElementById('logo-preview');
-            const socialLinksContainer = document.getElementById('social-links-container');
-            const addSocialLinkButton = document.getElementById('add-social-link');
 
-            const supabaseUrl = 'https://nabbbowykckcfsixxgws.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                let supabase;
 
-            // Load existing settings
-            async function loadSettings() {
-                try {
-                    const { data, error } = await supabase
-                        .from('settings')
-                        .select('key, value');
-
-                    if (error) throw error;
-
-                    const settings = data.reduce((acc, row) => {
-                        acc[row.key] = row.value;
-                        return acc;
-                    }, {});
-
-                    if (settings.logo) {
-                        logoPreview.src = settings.logo;
-                        logoPreview.style.display = 'block';
+                async function initializeSupabase() {
+                    try {
+                        const response = await fetch('/api/config');
+                        const config = await response.json();
+                        supabase = window.supabase.createClient(
+                            config.supabaseUrl,
+                            config.supabaseKey
+                        );
+                        loadSettings(); // Initial settings load
+                    } catch (error) {
+                        console.error('Error initializing Supabase:', error);
+                        alert(
+                            'Failed to initialize application. Please try again later.'
+                        );
                     }
-
-                    if (settings.socials) {
-                        settings.socials.forEach(addSocialLinkInput);
-                    }
-                } catch (error) {
-                    console.error('Error loading settings:', error);
                 }
-            }
 
-            function addSocialLinkInput(link = { platform: '', username: '' }) {
-                const div = document.createElement('div');
-                div.classList.add('social-link-group');
+                // Load existing settings
+                async function loadSettings() {
+                    try {
+                        const { data, error } = await supabase
+                            .from('settings')
+                            .select('key, value');
 
-                const platforms = [
-                    'youtube', 'xtwitter', 'twitter', 'twitch', 'tiktok', 'threads', 'telegram', 'teamspeak', 'spotify', 'snapchat',
-                    'reddit', 'patreon', 'patreon2', 'paypal', 'kofi', 'kick', 'instagram', 'github', 'facebook', 'discord',
-                    'bluesky', 'artstation', 'linkedin', 'whatsapp', 'vk', 'tumblr', 'trello', 'truewallet', 'stripe',
-                    'spotify', 'sketchfab', 'qrpayment', 'qrcode', 'promptpay', 'notion', 'modrinth', 'minecraft',
-                    'microsoft', 'google', 'fandom', 'domain', 'deviantart', 'cruseforge', 'apple', 'android',
-                    'wikipedia', 'windows', 'wise'
-                ];
+                        if (error) throw error;
 
-                const select = document.createElement('select');
-                select.classList.add('social-platform');
-                platforms.forEach(platform => {
-                    const option = document.createElement('option');
-                    option.value = platform;
-                    option.textContent = platform.charAt(0).toUpperCase() + platform.slice(1);
-                    if (link.platform === platform) {
-                        option.selected = true;
+                        const settings = data.reduce((acc, row) => {
+                            acc[row.key] = row.value;
+                            return acc;
+                        }, {});
+
+                        if (settings.logo) {
+                            logoPreview.src = settings.logo;
+                            logoPreview.style.display = 'block';
+                        }
+
+                        if (settings.socials) {
+                            settings.socials.forEach(addSocialLinkInput);
+                        }
+                    } catch (error) {
+                        console.error('Error loading settings:', error);
                     }
-                    select.appendChild(option);
-                });
+                }
 
-                div.innerHTML = `
+                function addSocialLinkInput(
+                    link = { platform: '', username: '' }
+                ) {
+                    const div = document.createElement('div');
+                    div.classList.add('social-link-group');
+
+                    const platforms = [
+                        'youtube',
+                        'xtwitter',
+                        'twitter',
+                        'twitch',
+                        'tiktok',
+                        'threads',
+                        'telegram',
+                        'teamspeak',
+                        'spotify',
+                        'snapchat',
+                        'reddit',
+                        'patreon',
+                        'patreon2',
+                        'paypal',
+                        'kofi',
+                        'kick',
+                        'instagram',
+                        'github',
+                        'facebook',
+                        'discord',
+                        'bluesky',
+                        'artstation',
+                        'linkedin',
+                        'whatsapp',
+                        'vk',
+                        'tumblr',
+                        'trello',
+                        'truewallet',
+                        'stripe',
+                        'spotify',
+                        'sketchfab',
+                        'qrpayment',
+                        'qrcode',
+                        'promptpay',
+                        'notion',
+                        'modrinth',
+                        'minecraft',
+                        'microsoft',
+                        'google',
+                        'fandom',
+                        'domain',
+                        'deviantart',
+                        'cruseforge',
+                        'apple',
+                        'android',
+                        'wikipedia',
+                        'windows',
+                        'wise',
+                    ];
+
+                    const select = document.createElement('select');
+                    select.classList.add('social-platform');
+                    platforms.forEach((platform) => {
+                        const option = document.createElement('option');
+                        option.value = platform;
+                        option.textContent =
+                            platform.charAt(0).toUpperCase() +
+                            platform.slice(1);
+                        if (link.platform === platform) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+
+                    div.innerHTML = `
                     <input type="text" placeholder="Username/ID" value="${link.username}" class="social-username">
                     <button type="button" class="remove-social-link">Remove</button>
                 `;
-                div.insertBefore(select, div.firstChild);
-                socialLinksContainer.appendChild(div);
-                div.querySelector('.remove-social-link').addEventListener('click', () => div.remove());
-            }
-
-            addSocialLinkButton.addEventListener('click', () => addSocialLinkInput());
-
-            logoUpload.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        logoPreview.src = e.target.result;
-                        logoPreview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(this.files[0]);
+                    div.insertBefore(select, div.firstChild);
+                    socialLinksContainer.appendChild(div);
+                    div.querySelector('.remove-social-link').addEventListener(
+                        'click',
+                        () => div.remove()
+                    );
                 }
-            });
 
-            settingsForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                let anyErrors = false;
+                addSocialLinkButton.addEventListener('click', () =>
+                    addSocialLinkInput()
+                );
 
-                // Handle logo upload
-                const logoFile = logoUpload.files[0];
-                if (logoFile) {
-                    const filePath = `logos/${Date.now()}_${logoFile.name}`;
-                    const { data: uploadData, error: uploadError } = await supabase.storage
-                        .from('public')
-                        .upload(filePath, logoFile, { upsert: true });
+                logoUpload.addEventListener('change', function () {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            logoPreview.src = e.target.result;
+                            logoPreview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
 
-                    if (uploadError) {
-                        alert(`Logo Upload Error: ${uploadError.message}`);
-                        console.error('Logo Upload Error:', uploadError);
-                        anyErrors = true;
-                    } else {
-                        const { data: urlData } = supabase.storage.from('public').getPublicUrl(uploadData.path);
-                        const { error: dbError } = await supabase
-                            .from('settings')
-                            .upsert({ key: 'logo', value: urlData.publicUrl }, { onConflict: 'key' });
+                settingsForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    let anyErrors = false;
 
-                        if (dbError) {
-                            alert(`Database Error (Logo): ${dbError.message}`);
-                            console.error('Database Error (Logo):', dbError);
+                    // Handle logo upload
+                    const logoFile = logoUpload.files[0];
+                    if (logoFile) {
+                        const filePath = `logos/${Date.now()}_${logoFile.name}`;
+                        const { data: uploadData, error: uploadError } =
+                            await supabase.storage
+                                .from('public')
+                                .upload(filePath, logoFile, { upsert: true });
+
+                        if (uploadError) {
+                            alert(`Logo Upload Error: ${uploadError.message}`);
+                            console.error('Logo Upload Error:', uploadError);
                             anyErrors = true;
+                        } else {
+                            const { data: urlData } = supabase.storage
+                                .from('public')
+                                .getPublicUrl(uploadData.path);
+                            const { error: dbError } = await supabase
+                                .from('settings')
+                                .upsert(
+                                    { key: 'logo', value: urlData.publicUrl },
+                                    { onConflict: 'key' }
+                                );
+
+                            if (dbError) {
+                                alert(
+                                    `Database Error (Logo): ${dbError.message}`
+                                );
+                                console.error(
+                                    'Database Error (Logo):',
+                                    dbError
+                                );
+                                anyErrors = true;
+                            }
                         }
                     }
-                }
 
-                // Handle social links
-                const socialLinks = Array.from(socialLinksContainer.querySelectorAll('.social-link-group'))
-                    .map(group => {
-                        const platform = group.querySelector('.social-platform').value;
-                        const username = group.querySelector('.social-username').value;
-                        return (platform && username) ? { platform, username } : null;
-                    })
-                    .filter(Boolean);
+                    // Handle social links
+                    const socialLinks = Array.from(
+                        socialLinksContainer.querySelectorAll(
+                            '.social-link-group'
+                        )
+                    )
+                        .map((group) => {
+                            const platform =
+                                group.querySelector('.social-platform').value;
+                            const username =
+                                group.querySelector('.social-username').value;
+                            return platform && username
+                                ? { platform, username }
+                                : null;
+                        })
+                        .filter(Boolean);
 
-                const { error: socialsError } = await supabase
-                    .from('settings')
-                    .upsert({ key: 'socials', value: socialLinks }, { onConflict: 'key' });
+                    const { error: socialsError } = await supabase
+                        .from('settings')
+                        .upsert(
+                            { key: 'socials', value: socialLinks },
+                            { onConflict: 'key' }
+                        );
 
-                if (socialsError) {
-                    alert(`Social Links Error: ${socialsError.message}`);
-                    console.error('Social Links Error:', socialsError);
-                    anyErrors = true;
-                }
+                    if (socialsError) {
+                        alert(`Social Links Error: ${socialsError.message}`);
+                        console.error('Social Links Error:', socialsError);
+                        anyErrors = true;
+                    }
 
-                if (!anyErrors) {
-                    alert('All settings saved successfully!');
-                }
+                    if (!anyErrors) {
+                        alert('All settings saved successfully!');
+                    }
+                });
+
+                initializeSupabase();
+
+                previewButton.addEventListener('click', () => {
+                    previewPopup.style.display = 'flex';
+                });
+
+                closePopupButton.addEventListener('click', () => {
+                    previewPopup.style.display = 'none';
+                });
+
+                // Close popup when clicking outside the content
+                window.addEventListener('click', (event) => {
+                    if (event.target === previewPopup) {
+                        previewPopup.style.display = 'none';
+                    }
+                });
             });
-
-            loadSettings();
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

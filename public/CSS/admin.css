@@ -1,269 +1,3 @@
-:root {
-    /* Define the color palette for easy management and consistency. */
-    --color-background: #FAFAFA; /* Light Grey */
-    --color-foreground: #111111; /* Even Darker Grey */
-    --color-accent: #FF6347; /* Tomato */
-    --color-sidebar-bg: #1a1a1a;
-    --color-sidebar-link: #ccc;
-    --color-sidebar-link-hover: #fff;
-    --color-sidebar-link-active: var(--color-accent);
-
-    /* Establish a root font size for responsive typography. */
-    font-size: 18px;
-}
-
-body {
-    /* Use a scalable rem unit for the halftone background size. */
-    background-color: var(--color-background);
-    background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px);
-    background-size: 5px 5px;
-    transition: background-color 0.25s ease;
-    color: var(--color-foreground);
-    font-family: 'Press Start 2P', cursive;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align content to the top */
-    min-height: 100vh;
-    margin: 0;
-    text-align: center;
-    overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-#wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#main {
-    width: 100%;
-    max-width: 50rem;
-}
-
-.inner {
-    padding: 2rem 2rem 2rem; /* Increased top padding */
-}
-
-.image .frame {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-    width: auto;
-    max-width: 14rem; /* Adjust as needed */
-    margin-bottom: 1.5rem;
-
-}
-
-body.belly-button-clicked .image .frame:hover {
-    transform: none;
-}
-
-
-.image .frame img {
-    width: 100%;
-    display: block;
-    border-radius: 0; /* Ensure no radius is applied */
-
-}
-
-#logo-container .frame {
-    position: relative;
-}
-
-#logo-container .logo {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-#logo-container .logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-
-}
-
-#logo-container .logo-1 {
-    position: relative;
-    opacity: 1;
-}
-
-#logo-container.step-2 .logo-1 {
-    opacity: 0;
-}
-
-#logo-container.step-2 .logo-2 {
-    opacity: 0;
-}
-
-#logo-container.step-3 .logo-2 {
-    opacity: 0;
-}
-
-#logo-container.step-3 .logo-3 {
-    opacity: 0;
-}
-
-
-.buttons {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-    display: flex;
-    flex-direction: column;
-    /* Use clamp() for a fluid gap between a min and max value. */
-    gap: 1rem;
-    align-items: center;
-}
-
-.buttons li a {
-    display: inline-block;
-    width: 22rem;
-    height: 3.5rem; /* Slightly taller buttons */
-    line-height: 3.5rem; /* Vertically center text */
-    padding: 0 1rem; /* More horizontal padding */
-    font-size: 1.1rem;
-    background-color: var(--color-foreground);
-    color: #FFFFFF;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 400;
-    border-radius: 1rem; /* More rounded corners */
-    transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Add a subtle shadow */
-}
-
-.buttons li a:hover {
-    transform: scale(1.05) translateY(-2px); /* Lift effect */
-    background-color: var(--color-accent);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15); /* Enhance shadow on hover */
-}
-
-
-
-
-/* Modal styles remain largely unchanged but benefit from global rem scaling. */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-    background-color: #fff; /* Brighter white */
-    margin: 15% auto;
-    padding: 2rem; /* More padding */
-    border: none; /* Remove border */
-    width: 80%;
-    max-width: 31.25rem; /* Converted to rem. */
-    border-radius: 1.5rem; /* More rounded corners */
-    text-align: center;
-    color: var(--color-foreground);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2); /* Softer, more prominent shadow */
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 1.75rem; /* Converted to rem. */
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#newsletter-form input[type="email"] {
-    width: 80%;
-    padding: 0.75rem; /* Converted to rem. */
-    margin: 0.5rem 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem; /* Converted to rem. */
-    box-sizing: border-box;
-}
-
-#newsletter-form button {
-    width: 80%;
-    background-color: var(--color-accent); /* Use accent color */
-    color: #fff; /* White text */
-    padding: 1rem 1.25rem; /* More padding */
-    margin: 0.5rem 0;
-    border: none;
-    border-radius: 0.5rem; /* More rounded */
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    transition: background-color 0.25s ease;
-}
-
-#newsletter-form button:hover {
-    background-color: #d44a33; /* Darker accent color */
-}
-
-/* Media query updated to use rem for responsive adjustments. */
-@media (max-width: 46rem) { /* 736px / 16px = 46rem */
-    :root {
-        /* Adjust base font size on smaller screens for better readability. */
-        font-size: 16px;
-    }
-.inner {
-    padding: 1rem;
-}
-    hr {
-        width: 15rem;
-    }
-    .buttons li a {
-        width: 100%;
-        max-width: 18rem;
-    }
-}
-
-/* Social Media Icons */
-.socials {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0;
-}
-
-.social-link {
-    display: inline-block;
-    transition: transform 0.25s ease;
-}
-
-.social-link .social-icon-hover {
-    display: none;
-}
-
-.social-link:hover .social-icon {
-    display: none;
-}
-
-.social-link:hover .social-icon-hover {
-    display: inline-block;
-}
-
-.social-icon {
-    width: 48px; /* Adjust size as needed */
-    height: 48px;
-}
-
 /* Admin Page Styles */
 body.admin-page {
     font-family: 'Roboto', sans-serif;
@@ -291,7 +25,6 @@ body.admin-page {
     text-align: center;
     margin-bottom: 2rem;
 }
-
 
 .sidebar-header h2 {
     color: #fff;
@@ -358,7 +91,7 @@ body.admin-page {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     text-align: center;
 }
 
@@ -380,7 +113,7 @@ body.admin-page {
     background-color: #fff;
     padding: 2rem;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .panel-header {
@@ -396,7 +129,8 @@ body.admin-page {
     color: #333;
 }
 
-.button-primary, .button-secondary {
+.button-primary,
+.button-secondary {
     padding: 0.8rem 1.2rem;
     border: none;
     border-radius: 0.5rem;
@@ -414,7 +148,8 @@ body.admin-page {
     background-color: #d44a33;
 }
 
-.button-primary:active, .button-secondary:active {
+.button-primary:active,
+.button-secondary:active {
     transform: translateY(1px);
 }
 
@@ -427,7 +162,6 @@ body.admin-page {
     background-color: #ccc;
 }
 
-
 .table-wrapper {
     overflow-x: auto;
 }
@@ -437,7 +171,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 1rem;
     border-bottom: 1px solid #eee;
     text-align: left;
@@ -458,7 +193,7 @@ tbody tr:hover {
 .card {
     background-color: #fff;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
 }
 
@@ -494,9 +229,9 @@ tbody tr:hover {
     font-weight: 700;
 }
 
-.form-group input[type="file"],
-.form-group input[type="text"],
-.form-group input[type="url"] {
+.form-group input[type='file'],
+.form-group input[type='text'],
+.form-group input[type='url'] {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ccc;
@@ -605,11 +340,18 @@ tbody tr:hover {
     .main-content {
         padding-top: 4rem; /* Add padding to avoid content being hidden by a potential top bar */
     }
-    
+
     .main-header {
         display: flex;
         align-items: center;
         gap: 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem;
+        background-color: #f4f7fa;
+        z-index: 999;
     }
 
     .main-header .menu-toggle {
@@ -618,6 +360,7 @@ tbody tr:hover {
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
+        z-index: 1001;
     }
 
     .panel-header {
@@ -629,7 +372,7 @@ tbody tr:hover {
     .stats-container {
         grid-template-columns: 1fr;
     }
-    
+
     .social-link-group {
         grid-template-columns: 1fr;
         gap: 0.5rem;
@@ -640,6 +383,57 @@ tbody tr:hover {
     }
 }
 
+.button-like-link {
+    background: none;
+    border: none;
+    color: var(--color-sidebar-link);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.8rem 1rem;
+    text-align: left;
+    width: 100%;
+}
+
+.button-like-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-sidebar-link-hover);
+}
+
+.preview-popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.preview-popup-content {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    width: 80%;
+    max-width: 400px;
+    height: 80%;
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+#preview-iframe {
+    flex-grow: 1;
+    border: none;
+}
+
+#close-popup {
+    margin-top: 1rem;
+}
+
 @media (max-width: 480px) {
     :root {
         font-size: 14px;
@@ -647,10 +441,5 @@ tbody tr:hover {
 
     .main-content {
         padding: 1rem;
-    }
-
-    .buttons li a {
-        width: 100%;
-        font-size: 1rem;
     }
 }

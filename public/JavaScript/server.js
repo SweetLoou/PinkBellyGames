@@ -10,8 +10,15 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, '..', '..', 'public')));
 app.use(express.json());
+
+app.get('/api/config', (req, res) => {
+    res.json({
+        supabaseUrl: process.env.SUPABASE_URL,
+        supabaseKey: process.env.SUPABASE_KEY,
+    });
+});
 
 // API to get all dashboard data
 app.get('/api/dashboard', async (req, res) => {
@@ -26,9 +33,10 @@ app.get('/api/dashboard', async (req, res) => {
             throw visitorsError;
         }
 
-        const { count: subscribersCount, error: subscribersCountError } = await supabase
-            .from('subscribers')
-            .select('*', { count: 'exact', head: true });
+        const { count: subscribersCount, error: subscribersCountError } =
+            await supabase
+                .from('subscribers')
+                .select('*', { count: 'exact', head: true });
 
         if (subscribersCountError) {
             throw subscribersCountError;
@@ -46,9 +54,8 @@ app.get('/api/dashboard', async (req, res) => {
         res.json({
             visitors: visitorsData ? visitorsData.value : 0,
             subscribersCount: subscribersCount,
-            subscribers: subscribers
+            subscribers: subscribers,
         });
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

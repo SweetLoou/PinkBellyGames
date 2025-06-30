@@ -1,149 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body class="admin-page">
-    <div class="admin-grid">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin</h2>
-                <button class="menu-toggle" id="sidebar-toggle-close">&times;</button>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="active"><a href="admin.html">Dashboard</a></li>
-                    <li><a href="https://sweetloou.github.io/PinkBellyGames/" target="_blank" rel="noopener">Website</a></li>
-                    <li><a href="settings.html">Settings</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="main-content">
-            <header class="main-header">
-                <button class="menu-toggle" id="sidebar-toggle-open">&#9776;</button>
-                <h1>Dashboard Overview</h1>
-            </header>
-            <div class="stats-container">
-                <div class="stat-box">
-                    <h3>Visitors</h3>
-                    <p id="visitors-count">0</p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="public/CSS/styles.css" />
+        <link rel="stylesheet" href="public/CSS/admin.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </head>
+    <body class="admin-page">
+        <div class="admin-grid">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Admin</h2>
+                    <button class="menu-toggle" id="sidebar-toggle-close">
+                        &times;
+                    </button>
                 </div>
-                <div class="stat-box">
-                    <h3>Subscribers</h3>
-                    <p id="subscribers-count">0</p>
-                </div>
-            </div>
-            <div class="content-panel">
-                <div class="panel-header">
-                    <h2>Subscribed Emails</h2>
-                    <div>
-                        <button id="refresh-button" class="button-primary">Refresh</button>
-                        <button id="csv-button" class="button-secondary">Download as CSV</button>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li class="active">
+                            <a href="admin.html">Dashboard</a>
+                        </li>
+                        <li>
+                            <a
+                                href="https://sweetloou.github.io/PinkBellyGames/"
+                                target="_blank"
+                                rel="noopener"
+                                >Website</a
+                            >
+                        </li>
+                        <li><a href="settings.html">Settings</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <button class="menu-toggle" id="sidebar-toggle-open">
+                        &#9776;
+                    </button>
+                    <h1>Dashboard Overview</h1>
+                </header>
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <h3>Visitors</h3>
+                        <p id="visitors-count">0</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Subscribers</h3>
+                        <p id="subscribers-count">0</p>
                     </div>
                 </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subscribers-list">
-                            <!-- Subscriber rows will be inserted here -->
-                        </tbody>
-                    </table>
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h2>Subscribed Emails</h2>
+                        <div>
+                            <button id="refresh-button" class="button-primary">
+                                Refresh
+                            </button>
+                            <button id="csv-button" class="button-secondary">
+                                Download as CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscribers-list">
+                                <!-- Subscriber rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </main>
-    </div>
-    <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const subscribersList = document.getElementById('subscribers-list');
-            const refreshButton = document.getElementById('refresh-button');
-            const csvButton = document.getElementById('csv-button');
+            </main>
+        </div>
+        <script src="public/JavaScript/script.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const subscribersList =
+                    document.getElementById('subscribers-list');
+                const refreshButton = document.getElementById('refresh-button');
+                const csvButton = document.getElementById('csv-button');
 
-            const supabaseUrl = 'https://nabbbowykckcfsixxgws.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hYmJib3d5a2NrY2ZzaXh4Z3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTA3MDgsImV4cCI6MjA2Njc4NjcwOH0.NRILPviKwcDE1b7cvJxjSCAJZXp_2ox80WiT35QrpNg';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                let supabase;
 
-            async function fetchData() {
-                try {
-                    const { data, error } = await supabase
-                        .from('subscribers')
-                        .select('email, subscribed_at')
-                        .order('subscribed_at', { ascending: false });
-
-                    if (error) throw error;
-
-                    subscribersList.innerHTML = ''; // Clear existing list
-                    
-                    data.forEach(subscriber => {
-                        const row = document.createElement('tr');
-                        const emailCell = document.createElement('td');
-                        const dateCell = document.createElement('td');
-                        
-                        emailCell.textContent = subscriber.email;
-                        
-                        const utcDate = new Date(subscriber.subscribed_at);
-                        dateCell.textContent = utcDate.toLocaleString();
-                        
-                        row.appendChild(emailCell);
-                        row.appendChild(dateCell);
-                        subscribersList.appendChild(row);
-                    });
-
-                } catch (error) {
-                    console.error('Error fetching subscribers:', error);
-                    alert('Could not load subscribers.');
+                async function initializeSupabase() {
+                    try {
+                        const response = await fetch('/api/config');
+                        const config = await response.json();
+                        supabase = window.supabase.createClient(
+                            config.supabaseUrl,
+                            config.supabaseKey
+                        );
+                        fetchData(); // Initial data fetch
+                    } catch (error) {
+                        console.error('Error initializing Supabase:', error);
+                        alert(
+                            'Failed to initialize application. Please try again later.'
+                        );
+                    }
                 }
-            }
 
-            refreshButton.addEventListener('click', fetchData);
+                async function fetchData() {
+                    try {
+                        const { data, error } = await supabase
+                            .from('subscribers')
+                            .select('email, subscribed_at')
+                            .order('subscribed_at', { ascending: false });
 
-            csvButton.addEventListener('click', async () => {
-                try {
-                    const { data, error } = await supabase
-                        .from('subscribers')
-                        .select('email, subscribed_at')
-                        .order('subscribed_at', { ascending: false });
+                        if (error) throw error;
 
-                    if (error) throw error;
+                        subscribersList.innerHTML = ''; // Clear existing list
 
-                    let csvContent = "data:text/csv;charset=utf-8,";
-                    csvContent += "Email,Time\n";
+                        data.forEach((subscriber) => {
+                            const row = document.createElement('tr');
+                            const emailCell = document.createElement('td');
+                            const dateCell = document.createElement('td');
 
-                    data.forEach(s => {
-                        const utcDate = new Date(s.subscribed_at);
-                        const row = `${s.email},"${utcDate.toLocaleString()}"`;
-                        csvContent += row + "\n";
-                    });
+                            emailCell.textContent = subscriber.email;
 
-                    const encodedUri = encodeURI(csvContent);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "subscribers.csv");
-                    document.body.appendChild(link);
+                            const utcDate = new Date(subscriber.subscribed_at);
+                            dateCell.textContent = utcDate.toLocaleString();
 
-                    link.click();
-                    document.body.removeChild(link);
-
-                } catch (error) {
-                    console.error('Error generating CSV:', error);
-                    alert('Could not generate CSV file.');
+                            row.appendChild(emailCell);
+                            row.appendChild(dateCell);
+                            subscribersList.appendChild(row);
+                        });
+                    } catch (error) {
+                        console.error('Error fetching subscribers:', error);
+                        alert('Could not load subscribers.');
+                    }
                 }
+
+                refreshButton.addEventListener('click', fetchData);
+
+                csvButton.addEventListener('click', async () => {
+                    try {
+                        const { data, error } = await supabase
+                            .from('subscribers')
+                            .select('email, subscribed_at')
+                            .order('subscribed_at', { ascending: false });
+
+                        if (error) throw error;
+
+                        let csvContent = 'data:text/csv;charset=utf-8,';
+                        csvContent += 'Email,Time\n';
+
+                        data.forEach((s) => {
+                            const utcDate = new Date(s.subscribed_at);
+                            const row = `${
+                                s.email
+                            },"${utcDate.toLocaleString()}"`;
+                            csvContent += row + '\n';
+                        });
+
+                        const encodedUri = encodeURI(csvContent);
+                        const link = document.createElement('a');
+                        link.setAttribute('href', encodedUri);
+                        link.setAttribute('download', 'subscribers.csv');
+                        document.body.appendChild(link);
+
+                        link.click();
+                        document.body.removeChild(link);
+                    } catch (error) {
+                        console.error('Error generating CSV:', error);
+                        alert('Could not generate CSV file.');
+                    }
+                });
+
+                initializeSupabase();
             });
-
-            fetchData();
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
