@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "PostgreSQL",
+      "name": "Postgres",
+      "connectString": "postgresql://user:password@host:port/database"
+    }
+  ],
+  "sqltools.language": "PostgreSQL",
+  "files.associations": {
+    "*.sql": "postgres"
+  }
+}

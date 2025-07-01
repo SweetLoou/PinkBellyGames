@@ -159,6 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function logSiteVisit() {
+        try {
+            const { error } = await supabase.from('site_stats').insert([
+                {
+                    path: window.location.pathname,
+                    user_agent: navigator.userAgent,
+                },
+            ]);
+            if (error) throw error;
+        } catch (error) {
+            console.error('Error logging site visit:', error);
+        }
+    }
+
     async function initializeSupabase() {
         try {
             const response = await fetch('/api/config');
@@ -168,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 config.supabaseKey
             );
             loadSettings(); // Initial settings load
+            logSiteVisit(); // Log the site visit
         } catch (error) {
             console.error('Error initializing Supabase:', error);
             alert('Failed to initialize application. Please try again later.');
