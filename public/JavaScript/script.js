@@ -148,28 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     linkElement.target = '_blank';
                     linkElement.rel = 'noopener';
                     linkElement.innerHTML = `
-                        <img src="public/Social Icons (Pixel-Art)/128x/${iconName}_icon.png" alt="${link.platform}" class="social-icon">
-                        <img src="public/Social Icons (Pixel-Art)/128x/${iconName}_icon_bg.png" alt="${link.platform}" class="social-icon social-icon-hover">
+                        <img src="/Social Icons (Pixel-Art)/128x/${iconName}_icon.png" alt="${link.platform}" class="social-icon">
+                        <img src="/Social Icons (Pixel-Art)/128x/${iconName}_icon_bg.png" alt="${link.platform}" class="social-icon social-icon-hover">
                     `;
                     socialsContainer.appendChild(linkElement);
                 });
             }
         } catch (error) {
             console.error('Error loading settings:', error);
-        }
-    }
-
-    async function logSiteVisit() {
-        try {
-            const { error } = await supabase.from('site_stats').insert([
-                {
-                    path: window.location.pathname,
-                    user_agent: navigator.userAgent,
-                },
-            ]);
-            if (error) throw error;
-        } catch (error) {
-            console.error('Error logging site visit:', error);
         }
     }
 
@@ -182,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 config.supabaseKey
             );
             loadSettings(); // Initial settings load
-            logSiteVisit(); // Log the site visit
+            // logSiteVisit(); // Log the site visit
         } catch (error) {
             console.error('Error initializing Supabase:', error);
             alert('Failed to initialize application. Please try again later.');
