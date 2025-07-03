@@ -31,9 +31,6 @@ async function connectToDb() {
     } catch (error) {
         console.error('Failed to connect to MongoDB', error);
         // Do not exit the process, allow the server to start without DB connection
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
     }
 }
 
@@ -129,7 +126,8 @@ app.post('/api/upload-logo', upload.single('logo'), async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-    connectToDb();
+connectToDb().then(() => {
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
 });
