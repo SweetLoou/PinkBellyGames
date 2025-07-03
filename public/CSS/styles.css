@@ -22,7 +22,7 @@ body {
     font-family: 'Press Start 2P', cursive;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align content to the top */
+    align-items: center; /* Align content to the center */
     min-height: 100vh;
     margin: 0;
     text-align: center;
@@ -118,9 +118,8 @@ body.belly-button-clicked .image .frame:hover {
 }
 
 .buttons li a {
-    display: inline-block;
-    width: 100%;
-    max-width: 22rem;
+    display: block; /* Changed to block to ensure full width */
+    width: 22rem; /* Fixed width for all buttons */
     height: 3.5rem; /* Slightly taller buttons */
     line-height: 3.5rem; /* Vertically center text */
     padding: 0 1rem; /* More horizontal padding */
@@ -224,8 +223,7 @@ body.belly-button-clicked .image .frame:hover {
         width: 15rem;
     }
     .buttons li a {
-        width: 100%;
-        max-width: 18rem;
+        width: 18rem; /* Fixed width for all buttons on smaller screens */
     }
 }
 
