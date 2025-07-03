@@ -52,9 +52,25 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(express.json());
+
+// Serve static files from the 'public' directory
 const publicPath = path.join(__dirname, '..', '..', 'public');
 console.log('Serving static files from:', publicPath);
 app.use(express.static(publicPath));
+
+// Serve specific HTML files from the public directory
+app.get('/', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'admin.html'));
+});
+
+app.get('/settings.html', (req, res) => {
+    res.sendFile(path.join(publicPath, 'settings.html'));
+});
+
 app.use('/uploads', express.static(uploadsDir));
 app.use('/assets', express.static(path.join(__dirname, '..', '..', 'assets')));
 
