@@ -1,3 +1,5 @@
+import { socialUrlTemplates } from './social-platforms.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const newsletterButton = document.getElementById('newsletter-button');
     const modal = document.getElementById('newsletter-modal');
@@ -6,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialsContainer = document.getElementById('socials-container');
     const siteLogo = document.getElementById('site-logo');
 
-    let supabase;
 
     // Sidebar Toggle Functionality
     const sidebar = document.querySelector('.sidebar');
@@ -49,12 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const { error } = await supabase
-                .from('subscribers')
-                .insert([{ email: email }]);
+            const response = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
 
-            if (error) {
-                throw error;
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'An error occurred.');
             }
 
             alert('Subscription successful!');
@@ -62,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
             newsletterForm.reset();
         } catch (error) {
             console.error('Subscription error:', error);
-            if (error.code === '23505') {
+            if (error.message.includes('already subscribed')) {
                 alert('Email already subscribed.');
             } else {
-                alert('An error occurred. Please try again.');
+                alert(error.message);
             }
         }
     });
@@ -73,18 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load settings
     async function loadSettings() {
         try {
-            const { data, error } = await supabase
-                .from('settings')
-                .select('key, value');
-
-            if (error) {
-                throw error;
-            }
-
-            const settings = data.reduce((acc, row) => {
-                acc[row.key] = row.value;
-                return acc;
-            }, {});
+            const response = await fetch('/api/settings');
+            const settings = await response.json();
 
             // Set Logo
             if (settings.logo) {
@@ -94,40 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Load Social Links
             if (settings.socials && settings.socials.length > 0) {
                 socialsContainer.innerHTML = '';
-                const socialUrlTemplates = {
-                    twitter: 'https://twitter.com/{username}',
-                    xtwitter: 'https://x.com/{username}',
-                    github: 'https://github.com/{username}',
-                    linkedin: 'https://linkedin.com/in/{username}',
-                    facebook: 'https://facebook.com/{username}',
-                    instagram: 'https://instagram.com/{username}',
-                    discord: 'https://discord.gg/{username}',
-                    youtube: 'https://youtube.com/@{username}',
-                    twitch: 'https://twitch.tv/{username}',
-                    patreon: 'https://patreon.com/{username}',
-                    kick: 'https://kick.com/{username}',
-                    kofi: 'https://ko-fi.com/{username}',
-                    artstation: 'https://www.artstation.com/{username}',
-                    bluesky: 'https://bsky.app/profile/{username}',
-                    cruseforge:
-                        'https://www.curseforge.com/members/{username}/projects',
-                    deviantart: 'https://www.deviantart.com/{username}',
-                    fandom: 'https://www.fandom.com/u/{username}',
-                    modrinth: 'https://modrinth.com/user/{username}',
-                    sketchfab: 'https://sketchfab.com/{username}',
-                    snapchat: 'https://www.snapchat.com/add/{username}',
-                    spotify: 'https://open.spotify.com/user/{username}',
-                    teamspeak: 'ts3server://{username}',
-                    telegram: 'https://t.me/{username}',
-                    threads: 'https://www.threads.net/@{username}',
-                    tiktok: 'https://www.tiktok.com/@{username}',
-                    trello: 'https://trello.com/u/{username}',
-                    tumblr: 'https://{username}.tumblr.com',
-                    vk: 'https://vk.com/{username}',
-                    whatsapp: 'https://wa.me/{username}',
-                    wikipedia: 'https://en.wikipedia.org/wiki/User:{username}',
-                    reddit: 'https://www.reddit.com/user/{username}',
-                };
 
                 settings.socials.forEach((link) => {
                     if (!link.username) return; // Skip if no username
@@ -159,21 +122,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function initializeSupabase() {
-        try {
-            const response = await fetch('/api/config');
-            const config = await response.json();
-            supabase = window.supabase.createClient(
-                config.supabaseUrl,
-                config.supabaseKey
-            );
-            loadSettings(); // Initial settings load
-            // logSiteVisit(); // Log the site visit
-        } catch (error) {
-            console.error('Error initializing Supabase:', error);
-            alert('Failed to initialize application. Please try again later.');
-        }
-    }
-
-    initializeSupabase();
+    loadSettings();
 });

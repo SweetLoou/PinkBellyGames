@@ -1,3 +1,5 @@
+import { socialPlatforms } from './social-platforms.js';
+
 document.addEventListener('DOMContentLoaded', function () {
     const settingsForm = document.getElementById('settings-form');
     const logoUpload = document.getElementById('logo-upload');
@@ -11,40 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const previewPopup = document.getElementById('preview-popup');
     const closePopupButton = document.getElementById('close-popup');
 
-
-    let supabase;
-
-    async function initializeSupabase() {
-        try {
-            if (!window.SUPABASE_URL || !window.SUPABASE_KEY) {
-                throw new Error('Supabase credentials not found.');
-            }
-            supabase = window.supabase.createClient(
-                window.SUPABASE_URL,
-                window.SUPABASE_KEY
-            );
-            loadSettings(); // Initial settings load
-        } catch (error) {
-            console.error('Error initializing Supabase:', error);
-            alert(
-                'Failed to initialize application. Please try again later.'
-            );
-        }
-    }
-
     // Load existing settings
     async function loadSettings() {
         try {
-            const { data, error } = await supabase
-                .from('settings')
-                .select('key, value');
-
-            if (error) throw error;
-
-            const settings = data.reduce((acc, row) => {
-                acc[row.key] = row.value;
-                return acc;
-            }, {});
+            const response = await fetch('/api/settings');
+            const settings = await response.json();
 
             if (settings.logo) {
                 logoPreview.src = settings.logo;
@@ -65,60 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const div = document.createElement('div');
         div.classList.add('social-link-group');
 
-        const platforms = [
-            'youtube',
-            'xtwitter',
-            'twitter',
-            'twitch',
-            'tiktok',
-            'threads',
-            'telegram',
-            'teamspeak',
-            'spotify',
-            'snapchat',
-            'reddit',
-            'patreon',
-            'patreon2',
-            'paypal',
-            'kofi',
-            'kick',
-            'instagram',
-            'github',
-            'facebook',
-            'discord',
-            'bluesky',
-            'artstation',
-            'linkedin',
-            'whatsapp',
-            'vk',
-            'tumblr',
-            'trello',
-            'truewallet',
-            'stripe',
-            'spotify',
-            'sketchfab',
-            'qrpayment',
-            'qrcode',
-            'promptpay',
-            'notion',
-            'modrinth',
-            'minecraft',
-            'microsoft',
-            'google',
-            'fandom',
-            'domain',
-            'deviantart',
-            'cruseforge',
-            'apple',
-            'android',
-            'wikipedia',
-            'windows',
-            'wise',
-        ];
-
         const select = document.createElement('select');
         select.classList.add('social-platform');
-        platforms.forEach((platform) => {
+        socialPlatforms.forEach((platform) => {
             const option = document.createElement('option');
             option.value = platform;
             option.textContent =
@@ -164,76 +86,61 @@ document.addEventListener('DOMContentLoaded', function () {
         // Handle logo upload
         const logoFile = logoUpload.files[0];
         if (logoFile) {
-            const filePath = `logos/${Date.now()}_${logoFile.name}`;
-            const { data: uploadData, error: uploadError } =
-                await supabase.storage
-                    .from('public')
-                    .upload(filePath, logoFile, { upsert: true });
+            const formData = new FormData();
+            formData.append('logo', logoFile);
 
-            if (uploadError) {
-                alert(`Logo Upload Error: ${uploadError.message}`);
-                console.error('Logo Upload Error:', uploadError);
-                anyErrors = true;
-            } else {
-                const { data: urlData } = supabase.storage
-                    .from('public')
-                    .getPublicUrl(uploadData.path);
-                const { error: dbError } = await supabase
-                    .from('settings')
-                    .upsert(
-                        { key: 'logo', value: urlData.publicUrl },
-                        { onConflict: 'key' }
-                    );
-
-                if (dbError) {
-                    alert(
-                        `Database Error (Logo): ${dbError.message}`
-                    );
-                    console.error(
-                        'Database Error (Logo):',
-                        dbError
-                    );
-                    anyErrors = true;
+            try {
+                const response = await fetch('/api/upload-logo', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || 'Logo upload failed');
                 }
+            } catch (error) {
+                alert(`Logo Upload Error: ${error.message}`);
+                console.error('Logo Upload Error:', error);
+                anyErrors = true;
             }
         }
 
         // Handle social links
         const socialLinks = Array.from(
-            socialLinksContainer.querySelectorAll(
-                '.social-link-group'
-            )
+            socialLinksContainer.querySelectorAll('.social-link-group')
         )
             .map((group) => {
-                const platform =
-                    group.querySelector('.social-platform').value;
-                const username =
-                    group.querySelector('.social-username').value;
-                return platform && username
-                    ? { platform, username }
-                    : null;
+                const platform = group.querySelector('.social-platform').value;
+                const username = group.querySelector('.social-username').value;
+                return platform && username ? { platform, username } : null;
             })
             .filter(Boolean);
 
-        const { error: socialsError } = await supabase
-            .from('settings')
-            .upsert(
-                { key: 'socials', value: socialLinks },
-                { onConflict: 'key' }
-            );
-
-        if (socialsError) {
-            alert(`Social Links Error: ${socialsError.message}`);
-            console.error('Social Links Error:', socialsError);
+        try {
+            const response = await fetch('/api/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ socials: socialLinks }),
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to save social links');
+            }
+        } catch (error) {
+            alert(`Social Links Error: ${error.message}`);
+            console.error('Social Links Error:', error);
             anyErrors = true;
         }
+
 
         if (!anyErrors) {
             alert('All settings saved successfully!');
         }
     });
 
-    initializeSupabase();
+    loadSettings();
 
     previewButton.addEventListener('click', () => {
         previewPopup.style.display = 'flex';

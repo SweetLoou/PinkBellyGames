@@ -10,9 +10,11 @@
             href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="public/CSS/styles.css" />
-        <link rel="stylesheet" href="public/CSS/admin.css" />
+        <link rel="stylesheet" href="/CSS/styles.css" />
+        <link rel="stylesheet" href="/CSS/admin.css" />
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script type="module" src="/JavaScript/social-platforms.js"></script>
+        <script type="module" src="/JavaScript/admin.js"></script>
     </head>
     <body class="admin-page">
         <div class="admin-grid">
@@ -85,102 +87,5 @@
                 </div>
             </main>
         </div>
-        <script src="public/JavaScript/script.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const subscribersList =
-                    document.getElementById('subscribers-list');
-                const refreshButton = document.getElementById('refresh-button');
-                const csvButton = document.getElementById('csv-button');
-
-                let supabase;
-
-                async function initializeSupabase() {
-                    try {
-                        const response = await fetch('/api/config');
-                        const config = await response.json();
-                        supabase = window.supabase.createClient(
-                            config.supabaseUrl,
-                            config.supabaseKey
-                        );
-                        fetchData(); // Initial data fetch
-                    } catch (error) {
-                        console.error('Error initializing Supabase:', error);
-                        alert(
-                            'Failed to initialize application. Please try again later.'
-                        );
-                    }
-                }
-
-                async function fetchData() {
-                    try {
-                        const { data, error } = await supabase
-                            .from('subscribers')
-                            .select('email, subscribed_at')
-                            .order('subscribed_at', { ascending: false });
-
-                        if (error) throw error;
-
-                        subscribersList.innerHTML = ''; // Clear existing list
-
-                        data.forEach((subscriber) => {
-                            const row = document.createElement('tr');
-                            const emailCell = document.createElement('td');
-                            const dateCell = document.createElement('td');
-
-                            emailCell.textContent = subscriber.email;
-
-                            const utcDate = new Date(subscriber.subscribed_at);
-                            dateCell.textContent = utcDate.toLocaleString();
-
-                            row.appendChild(emailCell);
-                            row.appendChild(dateCell);
-                            subscribersList.appendChild(row);
-                        });
-                    } catch (error) {
-                        console.error('Error fetching subscribers:', error);
-                        alert('Could not load subscribers.');
-                    }
-                }
-
-                refreshButton.addEventListener('click', fetchData);
-
-                csvButton.addEventListener('click', async () => {
-                    try {
-                        const { data, error } = await supabase
-                            .from('subscribers')
-                            .select('email, subscribed_at')
-                            .order('subscribed_at', { ascending: false });
-
-                        if (error) throw error;
-
-                        let csvContent = 'data:text/csv;charset=utf-8,';
-                        csvContent += 'Email,Time\n';
-
-                        data.forEach((s) => {
-                            const utcDate = new Date(s.subscribed_at);
-                            const row = `${
-                                s.email
-                            },"${utcDate.toLocaleString()}"`;
-                            csvContent += row + '\n';
-                        });
-
-                        const encodedUri = encodeURI(csvContent);
-                        const link = document.createElement('a');
-                        link.setAttribute('href', encodedUri);
-                        link.setAttribute('download', 'subscribers.csv');
-                        document.body.appendChild(link);
-
-                        link.click();
-                        document.body.removeChild(link);
-                    } catch (error) {
-                        console.error('Error generating CSV:', error);
-                        alert('Could not generate CSV file.');
-                    }
-                });
-
-                initializeSupabase();
-            });
-        </script>
     </body>
 </html>
