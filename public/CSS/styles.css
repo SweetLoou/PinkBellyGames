@@ -22,7 +22,6 @@ body {
     font-family: 'Press Start 2P', cursive;
     display: flex;
     justify-content: center;
-    align-items: center; /* Align content to the center */
     min-height: 100vh;
     margin: 0;
     text-align: center;
@@ -46,7 +45,7 @@ body {
 }
 
 .inner {
-    padding: 2rem 2rem 2rem; /* Increased top padding */
+    padding: 0.5rem 10rem 10rem; /* Further reduced top padding to move content up */
 }
 
 .image .frame {
@@ -55,7 +54,7 @@ body {
     display: inline-block;
     width: auto;
     max-width: 14rem; /* Adjust as needed */
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75; /* Further reduced margin to move logo up */
 }
 
 body.belly-button-clicked .image .frame:hover {
@@ -109,7 +108,7 @@ body.belly-button-clicked .image .frame:hover {
 .buttons {
     list-style: none;
     padding: 0;
-    margin: 0 0 1.5rem;
+    margin: 15 15 15rem; /* Further reduced margin to move buttons up */
     display: flex;
     flex-direction: column;
     /* Use clamp() for a fluid gap between a min and max value. */
@@ -232,7 +231,7 @@ body.belly-button-clicked .image .frame:hover {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 0;
+    margin-top: 2rem; /* Increased margin to move social icons lower */
 }
 
 .social-link {
@@ -256,3 +255,4 @@ body.belly-button-clicked .image .frame:hover {
     width: 48px; /* Adjust size as needed */
     height: 48px;
 }
+

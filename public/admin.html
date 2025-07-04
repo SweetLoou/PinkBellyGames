@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="CSS/styles.css" />
+        <link rel="stylesheet" href="CSS/admin.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script type="module" src="JavaScript/social-platforms.js"></script>
+        <script type="module" src="JavaScript/admin.js"></script>
+    </head>
+    <body class="admin-page">
+        <div class="admin-grid">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Admin</h2>
+                    <button class="menu-toggle" id="sidebar-toggle-close">
+                        &times;
+                    </button>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li class="active">
+                            <a href="/admin.html">Dashboard</a>
+                        </li>
+                        <li><a href="/logo.html">Logo</a></li>
+                        <li><a href="/navigation.html">Navigation</a></li>
+                        <li><a href="/socials.html">Socials</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <h1>Dashboard</h1>
+                </header>
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <h3>Visitors</h3>
+                        <p id="visitors-count">0</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Subscribers</h3>
+                        <p id="subscribers-count">0</p>
+                    </div>
+                </div>
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h2>Subscribed Emails</h2>
+                        <div>
+                            <button id="refresh-button" class="button-primary">
+                                Refresh
+                            </button>
+                            <button id="csv-button" class="button-secondary">
+                                Download as CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscribers-list">
+                                <!-- Subscriber rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Preview Popup -->
+        <div id="preview-popup" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-popup">&times;</span>
+                <iframe id="preview-iframe" src="" frameborder="0" title="Preview"></iframe>
+            </div>
+        </div>
+    </body>
+</html>

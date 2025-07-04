@@ -3,18 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Admin Settings</title>
+        <title>Admin - Socials</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="public/CSS/styles.css" />
-        <link rel="stylesheet" href="public/CSS/admin.css" />
+        <link rel="stylesheet" href="CSS/styles.css" />
+        <link rel="stylesheet" href="CSS/admin.css" />
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <script type="module" src="public/JavaScript/social-platforms.js"></script>
-        <script type="module" src="public/JavaScript/admin.js"></script>
+        <script type="module" src="JavaScript/socials.js"></script>
     </head>
     <body class="admin-page">
         <div class="admin-grid">
@@ -27,46 +26,19 @@
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
-                        <li><a href="admin.html">Dashboard</a></li>
-                        <li>
-                            <button id="preview-button" class="button-like-link">Preview</button>
-                        </li>
-                        <li class="active">
-                            <a href="settings.html">Settings</a>
-                        </li>
+                        <li><a href="/admin.html">Dashboard</a></li>
+                        <li><a href="/logo.html">Logo</a></li>
+                        <li><a href="/navigation.html">Navigation</a></li>
+                        <li class="active"><a href="/socials.html">Socials</a></li>
                     </ul>
                 </nav>
             </aside>
             <main class="main-content">
                 <header class="main-header">
-                    <button class="menu-toggle" id="sidebar-toggle-open">
-                        &#9776;
-                    </button>
-                    <h1>Settings</h1>
+                    <h1>Social Links</h1>
                 </header>
                 <div class="content-panel">
-                    <form id="settings-form">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Branding</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="logo-upload">Logo</label>
-                                    <input
-                                        type="file"
-                                        id="logo-upload"
-                                        name="logo"
-                                        accept="image/*"
-                                    />
-                                    <img
-                                        id="logo-preview"
-                                        src="#"
-                                        alt="Logo Preview"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <form id="socials-form">
                         <div class="card">
                             <div class="card-header">
                                 <h3>Social Links</h3>
@@ -89,18 +61,12 @@
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="button-primary">
-                                Save Settings
+                                Save Social Links
                             </button>
                         </div>
                     </form>
                 </div>
             </main>
-        </div>
-        <div id="preview-popup" class="preview-popup-container">
-            <div class="preview-popup-content">
-                <iframe id="preview-iframe" title="Website Preview" src="https://sweetloou.github.io/PinkBellyGames/"></iframe>
-                <button id="close-popup" class="button-secondary">Close</button>
-            </div>
         </div>
     </body>
 </html>

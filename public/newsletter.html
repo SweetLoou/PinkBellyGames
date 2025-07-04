@@ -3,18 +3,17 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Admin Dashboard</title>
+        <title>Admin - Newsletter</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="public/CSS/styles.css" />
-        <link rel="stylesheet" href="public/CSS/admin.css" />
+        <link rel="stylesheet" href="CSS/styles.css" />
+        <link rel="stylesheet" href="CSS/admin.css" />
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-        <script type="module" src="public/JavaScript/social-platforms.js"></script>
-        <script type="module" src="public/JavaScript/admin.js"></script>
+        <script type="module" src="JavaScript/newsletter.js"></script>
     </head>
     <body class="admin-page">
         <div class="admin-grid">
@@ -27,38 +26,18 @@
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
-                        <li class="active">
-                            <a href="admin.html">Dashboard</a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://sweetloou.github.io/PinkBellyGames/"
-                                target="_blank"
-                                rel="noopener"
-                                >Website</a
-                            >
-                        </li>
-                        <li><a href="settings.html">Settings</a></li>
+                        <li><a href="/admin.html">Dashboard</a></li>
+                        <li><a href="/logo.html">Logo</a></li>
+                        <li><a href="/navigation.html">Navigation</a></li>
+                        <li><a href="/socials.html">Socials</a></li>
+                        <li class="active"><a href="/newsletter.html">Newsletter</a></li>
                     </ul>
                 </nav>
             </aside>
             <main class="main-content">
                 <header class="main-header">
-                    <button class="menu-toggle" id="sidebar-toggle-open">
-                        &#9776;
-                    </button>
-                    <h1>Dashboard Overview</h1>
+                    <h1>Newsletter Management</h1>
                 </header>
-                <div class="stats-container">
-                    <div class="stat-box">
-                        <h3>Visitors</h3>
-                        <p id="visitors-count">0</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Subscribers</h3>
-                        <p id="subscribers-count">0</p>
-                    </div>
-                </div>
                 <div class="content-panel">
                     <div class="panel-header">
                         <h2>Subscribed Emails</h2>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin - Logo</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="CSS/styles.css" />
+        <link rel="stylesheet" href="CSS/admin.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script type="module" src="JavaScript/logo.js"></script>
+    </head>
+    <body class="admin-page">
+        <div class="admin-grid">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Admin</h2>
+                    <button class="menu-toggle" id="sidebar-toggle-close">
+                        &times;
+                    </button>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="/admin.html">Dashboard</a></li>
+                        <li class="active"><a href="/logo.html">Logo</a></li>
+                        <li><a href="/navigation.html">Navigation</a></li>
+                        <li><a href="/socials.html">Socials</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <h1>Logo Management</h1>
+                </header>
+                <div class="content-panel">
+                    <form id="logo-form">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="logo-upload">Upload New Logo</label>
+                                    <input
+                                        type="file"
+                                        id="logo-upload"
+                                        name="logo"
+                                        accept="image/*"
+                                    />
+                                    <button type="submit" class="button-primary">Upload Logo</button>
+                                </div>
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
